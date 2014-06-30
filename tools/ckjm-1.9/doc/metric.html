@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+<title>Metric Descriptions</title>
+
+<meta name="Generator" content="$Id: thread.pl 1.62 2006/09/19 16:53:01 dds Exp $" />
+<meta name="Author" content="Diomidis Spinellis" />
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:dds@aueb.gr" />
+<link rel="ToC" href="index.html" />
+<link rev="Subdocument" href="index.html" />
+<link rel="previous" href="./outfmt.html" />
+<link rel="next" href="./detail.html" />
+
+<style type="text/css">
+p.footer {font-size: 70%}
+pre { padding:4px; background-color: #eeeeee; border: 1px solid #000080;  }
+p.footer { FONT-FAMILY: tahoma; FONT-SIZE: 70%; COLOR: #505050; MARGIN-TOP: 0px; }
+h1 { background-color: #ffff99; border-left: #a0a0a0 10px solid; padding: 1px 4px 1px 15px; }
+hr { height: 1px; margin-top:1em; }
+</style>
+<!-- LS-START --><script language="vbscript">
+sub document_onKeyDown()
+   keypressed = window.event.keyCode
+   select case keypressed
+     case 78 'ALT-B
+        document.all("next").click
+     case 80 'ALT-P
+        document.all("previous").click
+     case 67 'ALT-C
+        document.all("contents").click
+   end select
+end sub
+</script><!-- LS-END -->
+</head>
+<body>
+<h1>Metric Descriptions</h1>
+The metrics <em>ckjm</em> will calculate and display for
+each class are the following.
+<dl>
+<dt>WMC - Weighted methods per class</dt><dd>
+A class's <em>weighted methods per class</em> WMC
+metric is simply the sum of the complexities of its methods.
+As a measure of complexity we can use the cyclomatic complexity,
+or we can abritrarily assign a complexity value of 1 to each method.
+The <em>ckjm</em> program assigns a complexity value of 1 to each method,
+and therefore the value of the WMC is equal to the number of methods
+in the class.
+</dd><dt>DIT - Depth of Inheritance Tree</dt><dd>
+The <em>depth of inheritance tree</em> (DIT) metric provides
+for each class a measure of the inheritance levels from the object
+hierarchy top.
+In Java where all classes inherit Object the minimum value
+of DIT is 1.
+</dd><dt>NOC - Number of Children</dt><dd>
+A class's <em>number of children</em> (NOC)
+metric simply
+measures the number of immediate descendants of the class.
+</dd><dt>CBO - Coupling between object classes</dt><dd>
+The <em>coupling between object classes</em> (CBO)
+metric represents the number of classes coupled to a given
+class (efferent couplings, Ce).
+This coupling can occur through method calls,
+field accesses, inheritance, arguments, return types,
+and exceptions.
+</dd><dt>RFC - Response for a Class</dt><dd>
+The metric called the <em>response for a class</em> (RFC)
+measures the number of different
+methods that can be executed when an object of that
+class receives a message (when a method is invoked
+for that object).
+Ideally, we would want to find for each method
+of the class, the methods that class will call,
+and repeat this for each called method,
+calculating what is called the <em>transitive closure</em>
+of the method's call graph.
+This process can however be both expensive and quite
+inaccurate.
+In <em>ckjm</em>, we calculate a rough
+approximation to the response set
+by simply inspecting method calls within the class's
+method bodies.
+This simplification was also used in the 1994 Chidamber and Kemerer
+description of the metrics.
+</dd><dt>LCOM - Lack of cohesion in methods</dt><dd>
+A class's <em>lack of cohesion in methods</em> (LCOM)
+metric counts the sets of methods in a class that are not related
+through the sharing of some of the class's fields.
+The original definition of this metric
+(which is the one used in <em>ckjm</em>)
+considers all pairs of a class's methods.
+In some of these pairs both methods access at
+least one common field of the class, while in
+other pairs the two methods to not share any
+common field accesses.
+The lack of cohesion in methods is then calculated
+by subtracting from the number of method pairs
+that don't share a field access the number of
+method pairs that do.
+Note that subsequent definitions
+of this metric used as a measurement basis the number
+of disjoint graph components of the class's methods.
+Others modified the definition of connectedness to
+include calls between the methods of the class.
+The program <em>ckjm</em> follows the original (1994) definition
+by Chidamber and Kemerer.
+</dd><dt>Ca - Afferent couplings</dt><dd>
+A class's afferent couplings is a measure of how many other classes
+use the specific class.
+Ca is calculated using the same definition as that used for
+calculating CBO (Ce).
+</dd><dt>NPM - Number of Public Methods</dt><dd>
+The NPM metric simply counts all the methods in a class that
+are declared as public.
+It can be used to measure the size of an API provided by a package.
+</dd>
+</dl>
+<p>
+<table width="100%"><tr><td class="navigate"><a href="index.html" accesskey="C" id="contents">Contents</a> </td><td align="right" class="navigate"><a href="./outfmt.html" accesskey="P" id="previous">&laquo;&nbsp;Previous</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="./detail.html" accesskey="N" id="next">Next (Measurement Details)&nbsp;&raquo;</a></td></tr></table></p>
+
+
+<hr /> <p class="footer">
+<!--Creative Commons License--><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/gr/deed.en"><img align="left" alt="Creative Commons License" style="border-width:0" src="http://creativecommons.org/images/public/somerights20.png"/></a>
+&nbsp;Last change: Saturday, November 5, 2005 10:29 am
+<br />
+&nbsp;Unless otherwise expressly stated, all original material on this page
+created by Diomidis Spinellis is licensed under a
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/gr/deed.en">Creative Commons Attribution-Share Alike 3.0 Greece License</a>.
+</p>
+</body>
+</html>

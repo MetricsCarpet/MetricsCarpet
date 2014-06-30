@@ -2,26 +2,10 @@ import os
 from findtools.find_files import (find_files, Match)
 
 
-KNOWN_LIBRARIES = [
-    'Bioformats',
-    'ImgLib2',
-    'Vigra',
-    'VTK',
-    'ITK',
-    'ImageMagick',
-]
-
-
-SOFTWARE_LOCATION = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    'ZurichCorpus',
-)
-
-
 class SoftwareProduct(object):
 
     def __init__(self, name, language, libraries, established_in_year,
-                 primary_paper, urls, categories):
+                 primary_paper, urls, categories, versions, corpus):
         self.name = name
         self.language = language
         self.libraries = libraries
@@ -30,48 +14,36 @@ class SoftwareProduct(object):
         self.urls = urls
         self.categories = categories
         self._location = None
+        self.versions = versions
+        self.corpus = corpus
 
     @property
-    def locaiton_path(self):
+    def location_path(self):
         if self._location is None:
-            self._location = os.path.join(SOFTWARE_LOCATION, self.name)
+            self._location = os.path.join(self.corpus.software_location,
+                                          self.name)
             assert os.path.exists(self._location)
         return self._location
 
     @staticmethod
-    def list_measurable_products():
-        '''Returns  a list of available quality tools'''
-        return [
-            ImageJ(),
-        ]
+    def _find_source_files(language, location):
+        if language == 'Java':
+            source_code_files = Match(filetype='f', name='*.java')
+        else:
+            raise Exception('Unknown language: %s' % language)
+        return find_files(path=location, match=source_code_files)
 
-    def get_files(self):
+    def get_source_files(self, version):
+        location = os.path.join(self.location_path, version)
+        return SoftwareProduct._find_source_files(self.language, location)
+
+    def get_all_source_files(self):
+        for version in self.versions:
+            for source_file in self.get_source_files(version):
+                yield source_file
+
+
+class SoftwareCorpus(object):
+
+    def list_measurable_products(self):
         raise NotImplementedError()
-
-
-class ImageJ(SoftwareProduct):
-
-    def __init__(self):
-        SoftwareProduct.__init__(
-            self,
-            name='ImageJ',
-            language='java',
-            libraries=['Bioformats'],
-            established_in_year='1987',  # as NIH Image
-            primary_paper=(
-                'C.A. Schneider, W.S. Rasband, K.W. Eliceir',
-                'NIH Image to ImageJ: 25 years of image analysis',
-                'http://www.nature.com/nmeth/journal/v9/n7/full/nmeth.2089.'
-                'html',
-            ),
-            urls=('http://imagej.nih.gov/ij/', ),
-            categories=['image_processing'],
-        )
-
-    def get_files(self):
-        source_code_files = Match(filetype='f', name='*.java')
-        found_files = find_files(path=self.locaiton_path,
-                                 match=source_code_files)
-
-        for found_file in found_files:
-            print found_file

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+<title>Using Ckjm With Ant</title>
+
+<meta name="Generator" content="$Id: thread.pl 1.62 2006/09/19 16:53:01 dds Exp $" />
+<meta name="Author" content="Diomidis Spinellis" />
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:dds@aueb.gr" />
+<link rel="ToC" href="index.html" />
+<link rev="Subdocument" href="index.html" />
+<link rel="previous" href="./detail.html" />
+<link rel="next" href="./web.html" />
+
+<style type="text/css">
+p.footer {font-size: 70%}
+pre { padding:4px; background-color: #eeeeee; border: 1px solid #000080;  }
+p.footer { FONT-FAMILY: tahoma; FONT-SIZE: 70%; COLOR: #505050; MARGIN-TOP: 0px; }
+h1 { background-color: #ffff99; border-left: #a0a0a0 10px solid; padding: 1px 4px 1px 15px; }
+hr { height: 1px; margin-top:1em; }
+</style>
+<!-- LS-START --><script language="vbscript">
+sub document_onKeyDown()
+   keypressed = window.event.keyCode
+   select case keypressed
+     case 78 'ALT-B
+        document.all("next").click
+     case 80 'ALT-P
+        document.all("previous").click
+     case 67 'ALT-C
+        document.all("contents").click
+   end select
+end sub
+</script><!-- LS-END -->
+</head>
+<body>
+<h1>Using Ckjm With Ant</h1>
+First define the <em>ant</em> task in your <code>build.xml</code> file.
+The <em>ckjm</em> jar file should be in the classpath.
+
+<pre>
+<font color="#008080">&lt;</font><font color="#008080">taskdef</font><font color="#008080"> </font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;ckjm&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>classname</b></font>=<font color="#ff00ff">&quot;gr.spinellis.ckjm.ant.CkjmTask&quot;</font><font color="#008080">&gt;</font>
+  <font color="#008080">&lt;</font><font color="#008080">classpath</font><font color="#008080">&gt;</font>
+    <font color="#008080">&lt;</font><font color="#008080">pathelement</font><font color="#008080"> </font><font color="#2e8b57"><b>location</b></font>=<font color="#ff00ff">&quot;path/to/ckjm1-2.jar&quot;</font><font color="#008080">/&gt;</font>
+  <font color="#008080">&lt;/classpath&gt;</font>
+<font color="#008080">&lt;/taskdef&gt;</font>
+</pre>
+Now you can make use of the <em>ckjm</em> task.
+The attributes of the <em>ckjm</em> task are the following:
+
+<dl>
+<dt>format</dt><dd>'plain' or 'xml'. Default is 'plain'</dd>
+<dt>outputfile</dt><dd>Required. Output will be written to outputfile.</dd>
+<dt>classdir</dt><dd>Required. Base directory which contains the class files.</dd>
+</dl>
+
+The <em>ckjm</em>
+task supports the nested elements &lt;include&gt; and &lt;exclude&gt;,
+which can be used to select the class files and the nested element
+&lt;extdirs&gt;, which is used to specify other class files participating in the
+inheritance hierarchy.
+The elements support
+<a href="http://ant.apache.org/manual/using.html#path">path-like structures</a>.
+
+Example usage:
+<pre>
+<font color="#008080">&lt;</font><font color="#008080">ckjm</font><font color="#008080"> </font><font color="#2e8b57"><b>outputfile</b></font>=<font color="#ff00ff">&quot;ckjm.xml&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>format</b></font>=<font color="#ff00ff">&quot;xml&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>classdir</b></font>=<font color="#ff00ff">&quot;build/classes&quot;</font><font color="#008080">&gt;</font>
+  <font color="#008080">&lt;</font><font color="#008080">include</font><font color="#008080"> </font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;**/*.class&quot;</font><font color="#008080"> /&gt;</font>
+  <font color="#008080">&lt;</font><font color="#008080">exclude</font><font color="#008080"> </font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;**/*Test.class&quot;</font><font color="#008080"> /&gt;</font>
+  <font color="#008080">&lt;</font><font color="#008080">extdirs</font><font color="#008080"> </font><font color="#2e8b57"><b>path</b></font>=<font color="#ff00ff">&quot;lib&quot;</font><font color="#008080"> /&gt;</font>
+<font color="#008080">&lt;/ckjm&gt;</font>
+</pre>
+
+You can use an XSL stylesheet to generate an HTML report from the XML
+output file.
+
+Example:
+<pre>
+<font color="#008080">&lt;</font><font color="#008080">style</font><font color="#008080"> </font><font color="#2e8b57"><b>in</b></font>=<font color="#ff00ff">&quot;ckjm.xml&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>style</b></font>=<font color="#ff00ff">&quot;path/to/ckjm.xsl&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>out</b></font>=<font color="#ff00ff">&quot;ckjm.html&quot;</font><font color="#008080"> /&gt;</font>
+</pre>
+
+The distribution contains in the <code>xsl</code> directory
+two sample XSL files.
+
+Here is a complete example of a build.xml file.
+<pre>
+<font color="#008080">&lt;</font><font color="#008080">project</font><font color="#008080"> </font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;myproject&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>default</b></font>=<font color="#ff00ff">&quot;ckjm&quot;</font><font color="#008080">&gt;</font>
+
+<font color="#008080">&lt;</font><font color="#008080">target</font><font color="#008080"> </font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;compile&quot;</font><font color="#008080">&gt;</font>
+  <font color="#0000ff">&lt;!</font><font color="#0000ff">-- your compile instructions --</font><font color="#0000ff">&gt;</font>
+<font color="#008080">&lt;/target&gt;</font>
+
+<font color="#008080">&lt;</font><font color="#008080">target</font><font color="#008080"> </font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;ckjm&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>depends</b></font>=<font color="#ff00ff">&quot;compile&quot;</font><font color="#008080">&gt;</font>
+
+  <font color="#008080">&lt;</font><font color="#008080">taskdef</font><font color="#008080"> </font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;ckjm&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>classname</b></font>=<font color="#ff00ff">&quot;gr.spinellis.ckjm.ant.CkjmTask&quot;</font><font color="#008080">&gt;</font>
+    <font color="#008080">&lt;</font><font color="#008080">classpath</font><font color="#008080">&gt;</font>
+      <font color="#008080">&lt;</font><font color="#008080">pathelement</font><font color="#008080"> </font><font color="#2e8b57"><b>location</b></font>=<font color="#ff00ff">&quot;path/to/ckjm1-2.jar&quot;</font><font color="#008080">/&gt;</font>
+    <font color="#008080">&lt;/classpath&gt;</font>
+  <font color="#008080">&lt;/taskdef&gt;</font>
+
+  <font color="#008080">&lt;</font><font color="#008080">ckjm</font><font color="#008080"> </font><font color="#2e8b57"><b>outputfile</b></font>=<font color="#ff00ff">&quot;ckjm.xml&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>format</b></font>=<font color="#ff00ff">&quot;xml&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>classdir</b></font>=<font color="#ff00ff">&quot;build/classes&quot;</font><font color="#008080">&gt;</font>
+    <font color="#008080">&lt;</font><font color="#008080">include</font><font color="#008080"> </font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;**/*.class&quot;</font><font color="#008080"> /&gt;</font>
+    <font color="#008080">&lt;</font><font color="#008080">exclude</font><font color="#008080"> </font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;**/*Test.class&quot;</font><font color="#008080"> /&gt;</font>
+  <font color="#008080">&lt;/ckjm&gt;</font>
+
+  <font color="#008080">&lt;</font><font color="#008080">style</font><font color="#008080"> </font><font color="#2e8b57"><b>in</b></font>=<font color="#ff00ff">&quot;ckjm.xml&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>style</b></font>=<font color="#ff00ff">&quot;path/to/ckjm.xsl&quot;</font><font color="#008080"> </font><font color="#2e8b57"><b>out</b></font>=<font color="#ff00ff">&quot;ckjm.html&quot;</font><font color="#008080"> /&gt;</font>
+<font color="#008080">&lt;/target&gt;</font>
+</pre>
+<p />
+If the analyzed files form part of a class hierarchy of other class files that
+are not part of the analysis, then the <code>extdirs</code>
+<a href="http://ant.apache.org/manual/using.html#path">path-like structure</a>
+of the <em>ckjm</em> task must be set to point to the directory containing
+the corresponding <em>jar</em> files.
+This will internally set the java.ext.dirs property so that
+<em>ckjm</em> can locate the jar files containing those classes.
+<p>
+<table width="100%"><tr><td class="navigate"><a href="index.html" accesskey="C" id="contents">Contents</a> </td><td align="right" class="navigate"><a href="./detail.html" accesskey="P" id="previous">&laquo;&nbsp;Previous</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="./web.html" accesskey="N" id="next">Next (Web Links and Acknowledgements)&nbsp;&raquo;</a></td></tr></table></p>
+
+
+<hr /> <p class="footer">
+<!--Creative Commons License--><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/gr/deed.en"><img align="left" alt="Creative Commons License" style="border-width:0" src="http://creativecommons.org/images/public/somerights20.png"/></a>
+&nbsp;Last change: Wednesday, July 25, 2007 6:18 pm
+<br />
+&nbsp;Unless otherwise expressly stated, all original material on this page
+created by Diomidis Spinellis is licensed under a
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/gr/deed.en">Creative Commons Attribution-Share Alike 3.0 Greece License</a>.
+</p>
+</body>
+</html>

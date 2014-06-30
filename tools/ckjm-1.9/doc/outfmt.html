@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+<title>Using Pipelines to Format the Output</title>
+
+<meta name="Generator" content="$Id: thread.pl 1.62 2006/09/19 16:53:01 dds Exp $" />
+<meta name="Author" content="Diomidis Spinellis" />
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:dds@aueb.gr" />
+<link rel="ToC" href="index.html" />
+<link rev="Subdocument" href="index.html" />
+<link rel="previous" href="./insel.html" />
+<link rel="next" href="./metric.html" />
+
+<style type="text/css">
+p.footer {font-size: 70%}
+pre { padding:4px; background-color: #eeeeee; border: 1px solid #000080;  }
+p.footer { FONT-FAMILY: tahoma; FONT-SIZE: 70%; COLOR: #505050; MARGIN-TOP: 0px; }
+h1 { background-color: #ffff99; border-left: #a0a0a0 10px solid; padding: 1px 4px 1px 15px; }
+hr { height: 1px; margin-top:1em; }
+</style>
+<!-- LS-START --><script language="vbscript">
+sub document_onKeyDown()
+   keypressed = window.event.keyCode
+   select case keypressed
+     case 78 'ALT-B
+        document.all("next").click
+     case 80 'ALT-P
+        document.all("previous").click
+     case 67 'ALT-C
+        document.all("contents").click
+   end select
+end sub
+</script><!-- LS-END -->
+</head>
+<body>
+<h1>Using Pipelines to Format the Output</h1>
+The output of <em>ckjm</em> is textual:
+one line for each class, each line contains 8 space-separated fields:
+the classname and the 7 metrics.
+If your application requires something more fancy,
+it is easy to post-process the <em>ckjm</em> output to
+obtain it.
+For example, the following <em>sed</em> script will generate
+XML output.
+<pre>
+<font color="#0000ff">#!/bin/sed -f</font>
+<font color="#a020f0">1</font><font color="#008080">i\</font>
+&lt;?xml version=&quot;1.0&quot; ?&gt;<font color="#6a5acd">\</font>
+&lt;ckjm&gt;
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#6a5acd">^</font><font color="#6a5acd">/</font>&lt;metric&gt;&lt;classname&gt;<font color="#6a5acd">/</font>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#a020f0"> </font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>classname&gt;&lt;WMC&gt;<font color="#6a5acd">/</font>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#a020f0"> </font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>WMC&gt;&lt;DIT&gt;<font color="#6a5acd">/</font>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#a020f0"> </font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>DIT&gt;&lt;NOC&gt;<font color="#6a5acd">/</font>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#a020f0"> </font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>NOC&gt;&lt;CBO&gt;<font color="#6a5acd">/</font>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#a020f0"> </font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>CBO&gt;&lt;RFC&gt;<font color="#6a5acd">/</font>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#a020f0"> </font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>RFC&gt;&lt;LCOM&gt;<font color="#6a5acd">/</font>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#a020f0"> </font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>LCOM&gt;&lt;Ca&gt;<font color="#6a5acd">/</font>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#a020f0"> </font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>Ca&gt;&lt;NPM&gt;<font color="#6a5acd">/</font>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#6a5acd">$</font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>NPM&gt;&lt;<font color="#6a5acd">\/</font>metric&gt;<font color="#6a5acd">/</font>
+<font color="#a020f0">$</font><font color="#008080">a\</font>
+&lt;/ckjm&gt;
+</pre>
+If you name the script <em>ckjm2xml</em> and make it executable,
+you can generate XML output and save it into a file as follows.
+<pre>
+java <font color="#6a5acd">-jar</font> /usr/local/lib/ckjm.jar *.class <font color="#804040"><b>|</b></font> ckjm2xml <font color="#804040"><b>&gt;</b></font>metrics.xml
+</pre>
+(Replace the sequence <code>/usr/local/lib/ckjm.jar</code>
+with the actual path and filename of the <em>ckjm</em> version you are using.)
+<br />
+Here is an example of the output.
+<!--
+java -jar ..\build\ckjm-1.6.jar ..\build\classes\gr\spinellis\ckjm\*.class | sed -f ckjm2xml | winclip -c
+-->
+<pre>
+<font color="#0000ff">&lt;?</font><font color="#2e8b57"><b>xml</b></font><font color="#2e8b57"><b> </b></font><font color="#2e8b57"><b>version</b></font>=<font color="#ff00ff">&quot;1.0&quot;</font><font color="#2e8b57"><b> </b></font><font color="#0000ff">?&gt;</font>
+<font color="#008080">&lt;</font><font color="#008080">ckjm</font><font color="#008080">&gt;</font>
+<font color="#008080">&lt;</font><font color="#008080">metric</font><font color="#008080">&gt;&lt;</font><font color="#008080">classname</font><font color="#008080">&gt;</font>gr.spinellis.ckjm.ClassMetricsContainer<font color="#008080">&lt;/classname&gt;</font><font color="#008080">&lt;</font><font color="#008080">WMC</font><font color="#008080">&gt;</font>3<font color="#008080">&lt;/WMC&gt;</font><font color="#008080">&lt;</font><font color="#008080">DIT</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/DIT&gt;</font><font color="#008080">&lt;</font><font color="#008080">NOC</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/NOC&gt;</font><font color="#008080">&lt;</font><font color="#008080">CBO</font><font color="#008080">&gt;</font>3<font color="#008080">&lt;/CBO&gt;</font><font color="#008080">&lt;</font><font color="#008080">RFC</font><font color="#008080">&gt;</font>18<font color="#008080">&lt;/RFC&gt;</font><font color="#008080">&lt;</font><font color="#008080">LCOM</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/LCOM&gt;</font><font color="#008080">&lt;</font><font color="#008080">Ca</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/Ca&gt;</font><font color="#008080">&lt;</font><font color="#008080">NPM</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/NPM&gt;&lt;/metric&gt;</font>
+<font color="#008080">&lt;</font><font color="#008080">metric</font><font color="#008080">&gt;&lt;</font><font color="#008080">classname</font><font color="#008080">&gt;</font>gr.spinellis.ckjm.MethodVisitor<font color="#008080">&lt;/classname&gt;</font><font color="#008080">&lt;</font><font color="#008080">WMC</font><font color="#008080">&gt;</font>11<font color="#008080">&lt;/WMC&gt;</font><font color="#008080">&lt;</font><font color="#008080">DIT</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/DIT&gt;</font><font color="#008080">&lt;</font><font color="#008080">NOC</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/NOC&gt;</font><font color="#008080">&lt;</font><font color="#008080">CBO</font><font color="#008080">&gt;</font>21<font color="#008080">&lt;/CBO&gt;</font><font color="#008080">&lt;</font><font color="#008080">RFC</font><font color="#008080">&gt;</font>40<font color="#008080">&lt;/RFC&gt;</font><font color="#008080">&lt;</font><font color="#008080">LCOM</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/LCOM&gt;</font><font color="#008080">&lt;</font><font color="#008080">Ca</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/Ca&gt;</font><font color="#008080">&lt;</font><font color="#008080">NPM</font><font color="#008080">&gt;</font>8<font color="#008080">&lt;/NPM&gt;&lt;/metric&gt;</font>
+<font color="#008080">&lt;</font><font color="#008080">metric</font><font color="#008080">&gt;&lt;</font><font color="#008080">classname</font><font color="#008080">&gt;</font>gr.spinellis.ckjm.CkjmOutputHandler<font color="#008080">&lt;/classname&gt;</font><font color="#008080">&lt;</font><font color="#008080">WMC</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/WMC&gt;</font><font color="#008080">&lt;</font><font color="#008080">DIT</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/DIT&gt;</font><font color="#008080">&lt;</font><font color="#008080">NOC</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/NOC&gt;</font><font color="#008080">&lt;</font><font color="#008080">CBO</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/CBO&gt;</font><font color="#008080">&lt;</font><font color="#008080">RFC</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/RFC&gt;</font><font color="#008080">&lt;</font><font color="#008080">LCOM</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/LCOM&gt;</font><font color="#008080">&lt;</font><font color="#008080">Ca</font><font color="#008080">&gt;</font>3<font color="#008080">&lt;/Ca&gt;</font><font color="#008080">&lt;</font><font color="#008080">NPM</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/NPM&gt;&lt;/metric&gt;</font>
+<font color="#008080">&lt;</font><font color="#008080">metric</font><font color="#008080">&gt;&lt;</font><font color="#008080">classname</font><font color="#008080">&gt;</font>gr.spinellis.ckjm.ClassMetrics<font color="#008080">&lt;/classname&gt;</font><font color="#008080">&lt;</font><font color="#008080">WMC</font><font color="#008080">&gt;</font>24<font color="#008080">&lt;/WMC&gt;</font><font color="#008080">&lt;</font><font color="#008080">DIT</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/DIT&gt;</font><font color="#008080">&lt;</font><font color="#008080">NOC</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/NOC&gt;</font><font color="#008080">&lt;</font><font color="#008080">CBO</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/CBO&gt;</font><font color="#008080">&lt;</font><font color="#008080">RFC</font><font color="#008080">&gt;</font>33<font color="#008080">&lt;/RFC&gt;</font><font color="#008080">&lt;</font><font color="#008080">LCOM</font><font color="#008080">&gt;</font>196<font color="#008080">&lt;/LCOM&gt;</font><font color="#008080">&lt;</font><font color="#008080">Ca</font><font color="#008080">&gt;</font>6<font color="#008080">&lt;/Ca&gt;</font><font color="#008080">&lt;</font><font color="#008080">NPM</font><font color="#008080">&gt;</font>23<font color="#008080">&lt;/NPM&gt;&lt;/metric&gt;</font>
+<font color="#008080">&lt;</font><font color="#008080">metric</font><font color="#008080">&gt;&lt;</font><font color="#008080">classname</font><font color="#008080">&gt;</font>gr.spinellis.ckjm.MetricsFilter<font color="#008080">&lt;/classname&gt;</font><font color="#008080">&lt;</font><font color="#008080">WMC</font><font color="#008080">&gt;</font>7<font color="#008080">&lt;/WMC&gt;</font><font color="#008080">&lt;</font><font color="#008080">DIT</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/DIT&gt;</font><font color="#008080">&lt;</font><font color="#008080">NOC</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/NOC&gt;</font><font color="#008080">&lt;</font><font color="#008080">CBO</font><font color="#008080">&gt;</font>6<font color="#008080">&lt;/CBO&gt;</font><font color="#008080">&lt;</font><font color="#008080">RFC</font><font color="#008080">&gt;</font>30<font color="#008080">&lt;/RFC&gt;</font><font color="#008080">&lt;</font><font color="#008080">LCOM</font><font color="#008080">&gt;</font>11<font color="#008080">&lt;/LCOM&gt;</font><font color="#008080">&lt;</font><font color="#008080">Ca</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/Ca&gt;</font><font color="#008080">&lt;</font><font color="#008080">NPM</font><font color="#008080">&gt;</font>5<font color="#008080">&lt;/NPM&gt;&lt;/metric&gt;</font>
+<font color="#008080">&lt;</font><font color="#008080">metric</font><font color="#008080">&gt;&lt;</font><font color="#008080">classname</font><font color="#008080">&gt;</font>gr.spinellis.ckjm.ClassVisitor<font color="#008080">&lt;/classname&gt;</font><font color="#008080">&lt;</font><font color="#008080">WMC</font><font color="#008080">&gt;</font>13<font color="#008080">&lt;/WMC&gt;</font><font color="#008080">&lt;</font><font color="#008080">DIT</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/DIT&gt;</font><font color="#008080">&lt;</font><font color="#008080">NOC</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/NOC&gt;</font><font color="#008080">&lt;</font><font color="#008080">CBO</font><font color="#008080">&gt;</font>14<font color="#008080">&lt;/CBO&gt;</font><font color="#008080">&lt;</font><font color="#008080">RFC</font><font color="#008080">&gt;</font>71<font color="#008080">&lt;/RFC&gt;</font><font color="#008080">&lt;</font><font color="#008080">LCOM</font><font color="#008080">&gt;</font>34<font color="#008080">&lt;/LCOM&gt;</font><font color="#008080">&lt;</font><font color="#008080">Ca</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/Ca&gt;</font><font color="#008080">&lt;</font><font color="#008080">NPM</font><font color="#008080">&gt;</font>9<font color="#008080">&lt;/NPM&gt;&lt;/metric&gt;</font>
+<font color="#008080">&lt;</font><font color="#008080">metric</font><font color="#008080">&gt;&lt;</font><font color="#008080">classname</font><font color="#008080">&gt;</font>gr.spinellis.ckjm.ClassMap<font color="#008080">&lt;/classname&gt;</font><font color="#008080">&lt;</font><font color="#008080">WMC</font><font color="#008080">&gt;</font>3<font color="#008080">&lt;/WMC&gt;</font><font color="#008080">&lt;</font><font color="#008080">DIT</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/DIT&gt;</font><font color="#008080">&lt;</font><font color="#008080">NOC</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/NOC&gt;</font><font color="#008080">&lt;</font><font color="#008080">CBO</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/CBO&gt;</font><font color="#008080">&lt;</font><font color="#008080">RFC</font><font color="#008080">&gt;</font>21<font color="#008080">&lt;/RFC&gt;</font><font color="#008080">&lt;</font><font color="#008080">LCOM</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/LCOM&gt;</font><font color="#008080">&lt;</font><font color="#008080">Ca</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/Ca&gt;</font><font color="#008080">&lt;</font><font color="#008080">NPM</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/NPM&gt;&lt;/metric&gt;</font>
+<font color="#008080">&lt;</font><font color="#008080">metric</font><font color="#008080">&gt;&lt;</font><font color="#008080">classname</font><font color="#008080">&gt;</font>gr.spinellis.ckjm.PrintPlainResults<font color="#008080">&lt;/classname&gt;</font><font color="#008080">&lt;</font><font color="#008080">WMC</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/WMC&gt;</font><font color="#008080">&lt;</font><font color="#008080">DIT</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/DIT&gt;</font><font color="#008080">&lt;</font><font color="#008080">NOC</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/NOC&gt;</font><font color="#008080">&lt;</font><font color="#008080">CBO</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/CBO&gt;</font><font color="#008080">&lt;</font><font color="#008080">RFC</font><font color="#008080">&gt;</font>8<font color="#008080">&lt;/RFC&gt;</font><font color="#008080">&lt;</font><font color="#008080">LCOM</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/LCOM&gt;</font><font color="#008080">&lt;</font><font color="#008080">Ca</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/Ca&gt;</font><font color="#008080">&lt;</font><font color="#008080">NPM</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/NPM&gt;&lt;/metric&gt;</font>
+<font color="#008080">&lt;/ckjm&gt;</font>
+</pre>
+<p />
+To copy the <em>ckjm</em>'s output to the Microsoft Windows clipboard
+to later paste the results into an MS-Word table, simply
+pipe the output of <em>ckjm</em> to the <em>winclip</em> command of the
+<a href="../../outwit">Outwit</a> tool suite.
+<p />
+You can also plot the results in various formats by using
+<a href="http://www.gnuplot.info">gnuplot</a>.
+Here is a diagram depicting the distribution of the CBO metric within
+the classes of <a href="http://www.eclipse.org">Eclipse</a>.<br />
+<img src="eclipse-cbo.png" alt="the distribution of the CBO metric within the classes of Eclipse" />
+<p>
+<table width="100%"><tr><td class="navigate"><a href="index.html" accesskey="C" id="contents">Contents</a> </td><td align="right" class="navigate"><a href="./insel.html" accesskey="P" id="previous">&laquo;&nbsp;Previous</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="./metric.html" accesskey="N" id="next">Next (Metric Descriptions)&nbsp;&raquo;</a></td></tr></table></p>
+
+
+<hr /> <p class="footer">
+<!--Creative Commons License--><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/gr/deed.en"><img align="left" alt="Creative Commons License" style="border-width:0" src="http://creativecommons.org/images/public/somerights20.png"/></a>
+&nbsp;Last change: Thursday, April 5, 2007 4:10 pm
+<br />
+&nbsp;Unless otherwise expressly stated, all original material on this page
+created by Diomidis Spinellis is licensed under a
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/gr/deed.en">Creative Commons Attribution-Share Alike 3.0 Greece License</a>.
+</p>
+</body>
+</html>

@@ -1,0 +1,883 @@
+<!doctype html public "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<title>ckjm - A Tool for Calculating Chidamber and Kemerer Java Metrics
+</title>
+
+<meta name="Generator" content="$Id: thread.pl,v 1.76 2012/05/10 16:56:34 dds Exp $" />
+<meta name="Author" content="Diomidis Spinellis" />
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:dds@aueb.gr" />
+<link rel="ToC" href="../index.html" />
+<link rev="Subdocument" href="../index.html" />
+
+<script language="javascript" src="../noteres/jquery-1.7.1.js"></script>
+<script language="javascript" src="../noteres/jquery.hotkeys.js"></script>
+<script language="javascript" src="../noteres/notes.js"></script>
+<link href="../noteres" rel="x-resource-directory" id="resources" />
+		
+<link href="../noteres/notes.css" rel="stylesheet" type="text/css" id="the_css" />
+		<link href="../noteres/whole-print.css" rel="stylesheet" type="text/css" media="print"/>
+</head>
+<body>
+<h1>ckjm - A Tool for Calculating Chidamber and Kemerer Java Metrics
+</h1>
+
+<p>
+<center>
+<i>
+<a href="http://www.dmst.aueb.gr/dds">Diomidis Spinellis</a><br />
+</i>
+<a href="http://www.dmst.aueb.gr">Department of Management Science and Technology</a><br />
+<a href="http://www.aueb.gr">Athens University of Economics and Business</a><br />
+Athens, Greece<br />
+<a href="mailto:dds@aueb.gr">dds@aueb.gr</a>
+</center>
+</p>
+<h2>ckjm - A Tool for Calculating Chidamber and Kemerer Java Metrics
+</h2>
+<h3>Introduction</h3>
+<p>
+The program <em>ckjm</em> calculates Chidamber and Kemerer object-oriented
+metrics by processing the bytecode of compiled Java files.
+The program calculates for each class the following six metrics, and displays
+them on its standard output, following the class's name:
+</p>
+<ul>
+<li>WMC: Weighted methods per class</li>
+<li>DIT: Depth of Inheritance Tree</li>
+<li>NOC: Number of Children</li>
+<li>CBO: Coupling between object classes</li>
+<li>RFC: Response for a Class</li>
+<li>LCOM: Lack of cohesion in methods</li>
+<li>Ca: Afferent coupling (not a C&amp;K metric)</li>
+<li>NPM: Number of Public Methods for a class (not a C&amp;K metric)</li>
+</ul>
+<p>
+I wrote this program out of frustration over the
+<a href="../../blog/20050211/">lack</a>
+of reliable programs to calculate the
+Chidamber and Kemerer object-oriented metrics.
+The programs I found on the web were either
+incomplete (they calculated only some of the metrics),
+or unreliable (they calculated results that were obviously wrong),
+or extremely inefficient (they required GBs of RAM and hours of processing).
+<em>Ckjm</em> is mean and lean, following the Unix tradition of doing
+one thing well.
+It will not automatically recurse directories looking for the files
+you want measured,
+it does not offer a GUI and fancy diagrams (or even an XML output facility),
+and it calculates only few metrics other than the six ones specified
+by Chidamber and Kemerer.
+However, it does this job thoroughly, and efficiently:
+on a 1.6GHz Pentium-M machine version 1.1 of the tool
+processed the 33MB of the Eclipse 3.0
+jar files (19717 classes) in 95 seconds.
+</p>
+<p>
+To run the program you simply specify the class files
+(or pairs of jar/class files)
+on its command line or standard input.
+The program will produce on its standard output a line for each class
+containing the complete name of the class and the values of the corresponding
+class metrics.
+This operation model allows the tool to be easilly extended using textual
+pre and post processors.
+</p>
+<h3>Operation</h3>
+To run <em>ckjm</em> you must run java with the <code>-jar</code>
+flag, providing as its argument the location of the file
+<code>ckjm.jar</code>.
+Next, you can specify as arguments the Java class files you want
+to analyze.
+<br />
+Example:
+<div class="code">
+
+<font face="monospace">
+java&nbsp;<font color="#6a5acd">-jar</font>&nbsp;/usr/local/lib/ckjm<font color="#ff00ff">-1</font>.<font color="#ff00ff">5</font>.jar build/classes/gr/spinellis/ckjm/*.class<br>
+</font>
+
+</div>
+(Replace the sequence <code>/usr/local/lib/ckjm-1.5.jar</code>
+with the actual path and filename of the <em>ckjm</em> version you are using.)
+<p />
+The command's output will be a list of class names (prefixed by the
+package they are defined in), followed by the corresponding
+metrics for that class: WMC, DIT, NOC, CBO, RFC, LCOM, Ce, and NPM.
+<pre>
+gr.spinellis.ckjm.ClassMetricsContainer 3 1 0 3 18 0 2 2
+gr.spinellis.ckjm.MethodVisitor 11 1 0 21 40 0 1 8
+gr.spinellis.ckjm.CkjmOutputHandler 1 1 0 1 1 0 3 1
+gr.spinellis.ckjm.ClassMetrics 24 1 0 0 33 196 6 23
+gr.spinellis.ckjm.MetricsFilter 7 1 0 6 30 11 2 5
+gr.spinellis.ckjm.ClassVisitor 13 1 0 14 71 34 2 9
+gr.spinellis.ckjm.ClassMap 3 1 0 1 21 0 0 2
+gr.spinellis.ckjm.PrintPlainResults 2 1 0 2 8 0 1 2
+</pre>
+<p />
+If the classes are located in a <em>jar</em> archive, you can
+specify as a single argument the name of the archive,
+followed by a space, followed by the name of the class in the archive.
+<div class="code">
+
+<font face="monospace">
+java&nbsp;<font color="#6a5acd">-jar</font>&nbsp;/usr/local/lib/ckjm.jar&nbsp;<font color="#804040"><b>'</b></font><font color="#ff00ff">ant-jai.jar&nbsp;&nbsp; org/apache/tools/ant/types/optional/image/Text.class</font><font color="#804040"><b>'</b></font><br>
+</font>
+
+</div>
+<p />
+Finally, instead of specifying the classes to be analyszed as the
+command's arguments, you pass them (as class files, or as jar file, class
+file pairs) on the command's standard input.
+The following example will process all class files located in the
+build directory.
+<div class="code">
+
+<font face="monospace">
+find build&nbsp;<font color="#6a5acd">-name</font>&nbsp;<font color="#804040"><b>'</b></font><font color="#ff00ff">*.class</font><font color="#804040"><b>'</b></font>&nbsp;<font color="#6a5acd">-print</font>&nbsp;| java&nbsp;<font color="#6a5acd">-jar</font>&nbsp;/usr/local/lib/ckjm.jar<br>
+</font>
+
+</div>
+<p />
+The program, by default, will not take into account classes that belong
+to the Java SDK packages.
+The command-line option switch <code>-s</code>, can be used to enable this
+processing.
+<h3>Using Pipelines to Select Classes</h3>
+Using the Unix <em>find</em> command to select the class files
+to process, provides infinite flexibility.
+<ul>
+<li>
+You can specify a range of modification times for the files.
+As an example, the following command will print the metrics of
+the class files modified during the last week.
+<div class="code">
+
+<font face="monospace">
+find build&nbsp;<font color="#6a5acd">-name</font>&nbsp;<font color="#804040"><b>'</b></font><font color="#ff00ff">*.class</font><font color="#804040"><b>'</b></font>&nbsp;<font color="#6a5acd">-mtime</font>&nbsp;<font color="#ff00ff">-7</font>&nbsp;<font color="#6a5acd">-print</font>&nbsp;| java&nbsp;<font color="#6a5acd">-jar</font>&nbsp;/usr/local/lib/ckjm.jar<br>
+</font>
+
+</div>
+</li>
+<li>
+You can filter out specific patterns, either with the GNU
+<em>find</em>'s regular expression options, or by piping its results
+through <em>grep</em>.
+As an example, the following command will not print metrics for
+internal classes (their name contains a $ character).
+<div class="code">
+
+<font face="monospace">
+find build&nbsp;<font color="#6a5acd">-name</font>&nbsp;<font color="#804040"><b>'</b></font><font color="#ff00ff">*.class</font><font color="#804040"><b>'</b></font>&nbsp;| fgrep&nbsp;<font color="#6a5acd">-v</font>&nbsp;<font color="#804040"><b>'</b></font><font color="#ff00ff">$</font><font color="#804040"><b>'</b></font>&nbsp;| java&nbsp;<font color="#6a5acd">-jar</font>&nbsp;/usr/local/lib/ckjm.jar<br>
+</font>
+
+</div>
+</li>
+<li>
+You process contents from several directories.
+As an example, the following command will process the class files
+located in the build and lib directories.
+<div class="code">
+
+<font face="monospace">
+find build lib&nbsp;<font color="#6a5acd">-name</font>&nbsp;<font color="#804040"><b>'</b></font><font color="#ff00ff">*.class</font><font color="#804040"><b>'</b></font>&nbsp;<font color="#6a5acd">-print</font>&nbsp;| java&nbsp;<font color="#6a5acd">-jar</font>&nbsp;/usr/local/lib/ckjm.jar<br>
+</font>
+
+</div>
+</li>
+<li>
+You generate the list of class files, by processing the list of
+contents of a jar file.
+The following example will calculate the metrics for all class files
+located in the file ant.jar (the <em>sed</em> step prints only the lines
+ending in .class, replacing the beginning of the line with the name of the
+jar file, ant.jar.
+.
+<div class="code">
+
+<font face="monospace">
+jar tf ant.jar |<br>
+sed&nbsp;<font color="#6a5acd">-n</font>&nbsp;<font color="#804040"><b>'</b></font><font color="#ff00ff">/\.class$/s/^/ant.jar /p</font><font color="#804040"><b>'</b></font>&nbsp;|<br>
+java&nbsp;<font color="#6a5acd">-jar</font>&nbsp;/usr/local/lib/ckjm.jar<br>
+</font>
+
+</div>
+</li>
+<li> You can also combine the above patterns (and more)
+into more sophisticated file location and selection options.
+The following example, will process the classes of
+all jar files located in the lib directory.
+<div class="code">
+
+<font face="monospace">
+<font color="#804040"><b>for&nbsp;</b></font>i&nbsp;<font color="#804040"><b>in</b></font>&nbsp;lib/*.jar<br>
+<font color="#804040"><b>do</b></font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jar tf&nbsp;<font color="#a020f0">$i</font>&nbsp;<font color="#804040"><b>|</b></font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sed&nbsp;<font color="#804040"><b>-n</b></font>&nbsp;<font color="#804040"><b>&quot;</b></font><font color="#ff00ff">/\.class$/s,^,</font><font color="#a020f0">$i</font><font color="#ff00ff">&nbsp;,p</font><font color="#804040"><b>&quot;</b></font><br>
+<font color="#804040"><b>done</b></font>&nbsp;|<br>
+java&nbsp;<font color="#6a5acd">-jar</font>&nbsp;/usr/java/ckjm<font color="#ff00ff">-1</font>.<font color="#ff00ff">3</font>/build/ckjm<font color="#ff00ff">-1</font>.<font color="#ff00ff">3</font>.jar<br>
+</font>
+
+</div>
+(Replace the sequence <code>/usr/java/ckjm-1.3/build/ckjm-1.3.jar</code>
+with the actual path and filename of the <em>ckjm</em> version you are using.)
+</li>
+</ul>
+<h3>Using Pipelines to Format the Output</h3>
+The output of <em>ckjm</em> is textual:
+one line for each class, each line contains 8 space-separated fields:
+the classname and the 7 metrics.
+If your application requires something more fancy,
+it is easy to post-process the <em>ckjm</em> output to
+obtain it.
+For example, the following <em>sed</em> script will generate
+XML output.
+<div class="code">
+
+<font face="monospace">
+<font color="#0000ff">#!/bin/sed -f</font><br>
+<font color="#a020f0">1</font><font color="#008080">i\</font><br>
+&lt;?xml version=&quot;1.0&quot; ?&gt;<font color="#6a5acd">\</font><br>
+&lt;ckjm&gt;<br>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#6a5acd">^</font><font color="#6a5acd">/</font>&lt;metric&gt;&lt;classname&gt;<font color="#6a5acd">/</font><br>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#a020f0">&nbsp;</font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>classname&gt;&lt;WMC&gt;<font color="#6a5acd">/</font><br>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#a020f0">&nbsp;</font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>WMC&gt;&lt;DIT&gt;<font color="#6a5acd">/</font><br>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#a020f0">&nbsp;</font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>DIT&gt;&lt;NOC&gt;<font color="#6a5acd">/</font><br>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#a020f0">&nbsp;</font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>NOC&gt;&lt;CBO&gt;<font color="#6a5acd">/</font><br>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#a020f0">&nbsp;</font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>CBO&gt;&lt;RFC&gt;<font color="#6a5acd">/</font><br>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#a020f0">&nbsp;</font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>RFC&gt;&lt;LCOM&gt;<font color="#6a5acd">/</font><br>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#a020f0">&nbsp;</font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>LCOM&gt;&lt;Ca&gt;<font color="#6a5acd">/</font><br>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#a020f0">&nbsp;</font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>Ca&gt;&lt;NPM&gt;<font color="#6a5acd">/</font><br>
+<font color="#008080">s</font><font color="#6a5acd">/</font><font color="#6a5acd">$</font><font color="#6a5acd">/</font>&lt;<font color="#6a5acd">\/</font>NPM&gt;&lt;<font color="#6a5acd">\/</font>metric&gt;<font color="#6a5acd">/</font><br>
+<font color="#a020f0">$</font><font color="#008080">a\</font><br>
+&lt;/ckjm&gt;<br>
+</font>
+
+</div>
+If you name the script <em>ckjm2xml</em> and make it executable,
+you can generate XML output and save it into a file as follows.
+<div class="code">
+
+<font face="monospace">
+java&nbsp;<font color="#6a5acd">-jar</font>&nbsp;/usr/local/lib/ckjm.jar *.class | ckjm2xml&nbsp;<font color="#804040"><b>&gt;</b></font>metrics.xml<br>
+</font>
+
+</div>
+(Replace the sequence <code>/usr/local/lib/ckjm.jar</code>
+with the actual path and filename of the <em>ckjm</em> version you are using.)
+<br />
+Here is an example of the output.
+<!--
+java -jar ..\build\ckjm-1.6.jar ..\build\classes\gr\spinellis\ckjm\*.class | sed -f ckjm2xml | winclip -c
+-->
+<div class="code">
+
+<font face="monospace">
+<font color="#0000ff">&lt;?</font><font color="#2e8b57"><b>xml</b></font><font color="#2e8b57"><b>&nbsp;</b></font><font color="#2e8b57"><b>version</b></font>=<font color="#ff00ff">&quot;1.0&quot;</font><font color="#2e8b57"><b>&nbsp;</b></font><font color="#0000ff">?&gt;</font><br>
+<font color="#008080">&lt;</font><font color="#008080">ckjm</font><font color="#008080">&gt;</font><br>
+<font color="#008080">&lt;</font><font color="#008080">metric</font><font color="#008080">&gt;&lt;</font><font color="#008080">classname</font><font color="#008080">&gt;</font>gr.spinellis.ckjm.ClassMetricsContainer<font color="#008080">&lt;/classname&gt;</font><font color="#008080">&lt;</font><font color="#008080">WMC</font><font color="#008080">&gt;</font>3<font color="#008080">&lt;/WMC&gt;</font><font color="#008080">&lt;</font><font color="#008080">DIT</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/DIT&gt;</font><font color="#008080">&lt;</font><font color="#008080">NOC</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/NOC&gt;</font><font color="#008080">&lt;</font><font color="#008080">CBO</font><font color="#008080">&gt;</font>3<font color="#008080">&lt;/CBO&gt;</font><font color="#008080">&lt;</font><font color="#008080">RFC</font><font color="#008080">&gt;</font>18<font color="#008080">&lt;/RFC&gt;</font><font color="#008080">&lt;</font><font color="#008080">LCOM</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/LCOM&gt;</font><font color="#008080">&lt;</font><font color="#008080">Ca</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/Ca&gt;</font><font color="#008080">&lt;</font><font color="#008080">NPM</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/NPM&gt;&lt;/metric&gt;</font><br>
+<font color="#008080">&lt;</font><font color="#008080">metric</font><font color="#008080">&gt;&lt;</font><font color="#008080">classname</font><font color="#008080">&gt;</font>gr.spinellis.ckjm.MethodVisitor<font color="#008080">&lt;/classname&gt;</font><font color="#008080">&lt;</font><font color="#008080">WMC</font><font color="#008080">&gt;</font>11<font color="#008080">&lt;/WMC&gt;</font><font color="#008080">&lt;</font><font color="#008080">DIT</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/DIT&gt;</font><font color="#008080">&lt;</font><font color="#008080">NOC</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/NOC&gt;</font><font color="#008080">&lt;</font><font color="#008080">CBO</font><font color="#008080">&gt;</font>21<font color="#008080">&lt;/CBO&gt;</font><font color="#008080">&lt;</font><font color="#008080">RFC</font><font color="#008080">&gt;</font>40<font color="#008080">&lt;/RFC&gt;</font><font color="#008080">&lt;</font><font color="#008080">LCOM</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/LCOM&gt;</font><font color="#008080">&lt;</font><font color="#008080">Ca</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/Ca&gt;</font><font color="#008080">&lt;</font><font color="#008080">NPM</font><font color="#008080">&gt;</font>8<font color="#008080">&lt;/NPM&gt;&lt;/metric&gt;</font><br>
+<font color="#008080">&lt;</font><font color="#008080">metric</font><font color="#008080">&gt;&lt;</font><font color="#008080">classname</font><font color="#008080">&gt;</font>gr.spinellis.ckjm.CkjmOutputHandler<font color="#008080">&lt;/classname&gt;</font><font color="#008080">&lt;</font><font color="#008080">WMC</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/WMC&gt;</font><font color="#008080">&lt;</font><font color="#008080">DIT</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/DIT&gt;</font><font color="#008080">&lt;</font><font color="#008080">NOC</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/NOC&gt;</font><font color="#008080">&lt;</font><font color="#008080">CBO</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/CBO&gt;</font><font color="#008080">&lt;</font><font color="#008080">RFC</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/RFC&gt;</font><font color="#008080">&lt;</font><font color="#008080">LCOM</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/LCOM&gt;</font><font color="#008080">&lt;</font><font color="#008080">Ca</font><font color="#008080">&gt;</font>3<font color="#008080">&lt;/Ca&gt;</font><font color="#008080">&lt;</font><font color="#008080">NPM</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/NPM&gt;&lt;/metric&gt;</font><br>
+<font color="#008080">&lt;</font><font color="#008080">metric</font><font color="#008080">&gt;&lt;</font><font color="#008080">classname</font><font color="#008080">&gt;</font>gr.spinellis.ckjm.ClassMetrics<font color="#008080">&lt;/classname&gt;</font><font color="#008080">&lt;</font><font color="#008080">WMC</font><font color="#008080">&gt;</font>24<font color="#008080">&lt;/WMC&gt;</font><font color="#008080">&lt;</font><font color="#008080">DIT</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/DIT&gt;</font><font color="#008080">&lt;</font><font color="#008080">NOC</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/NOC&gt;</font><font color="#008080">&lt;</font><font color="#008080">CBO</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/CBO&gt;</font><font color="#008080">&lt;</font><font color="#008080">RFC</font><font color="#008080">&gt;</font>33<font color="#008080">&lt;/RFC&gt;</font><font color="#008080">&lt;</font><font color="#008080">LCOM</font><font color="#008080">&gt;</font>196<font color="#008080">&lt;/LCOM&gt;</font><font color="#008080">&lt;</font><font color="#008080">Ca</font><font color="#008080">&gt;</font>6<font color="#008080">&lt;/Ca&gt;</font><font color="#008080">&lt;</font><font color="#008080">NPM</font><font color="#008080">&gt;</font>23<font color="#008080">&lt;/NPM&gt;&lt;/metric&gt;</font><br>
+<font color="#008080">&lt;</font><font color="#008080">metric</font><font color="#008080">&gt;&lt;</font><font color="#008080">classname</font><font color="#008080">&gt;</font>gr.spinellis.ckjm.MetricsFilter<font color="#008080">&lt;/classname&gt;</font><font color="#008080">&lt;</font><font color="#008080">WMC</font><font color="#008080">&gt;</font>7<font color="#008080">&lt;/WMC&gt;</font><font color="#008080">&lt;</font><font color="#008080">DIT</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/DIT&gt;</font><font color="#008080">&lt;</font><font color="#008080">NOC</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/NOC&gt;</font><font color="#008080">&lt;</font><font color="#008080">CBO</font><font color="#008080">&gt;</font>6<font color="#008080">&lt;/CBO&gt;</font><font color="#008080">&lt;</font><font color="#008080">RFC</font><font color="#008080">&gt;</font>30<font color="#008080">&lt;/RFC&gt;</font><font color="#008080">&lt;</font><font color="#008080">LCOM</font><font color="#008080">&gt;</font>11<font color="#008080">&lt;/LCOM&gt;</font><font color="#008080">&lt;</font><font color="#008080">Ca</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/Ca&gt;</font><font color="#008080">&lt;</font><font color="#008080">NPM</font><font color="#008080">&gt;</font>5<font color="#008080">&lt;/NPM&gt;&lt;/metric&gt;</font><br>
+<font color="#008080">&lt;</font><font color="#008080">metric</font><font color="#008080">&gt;&lt;</font><font color="#008080">classname</font><font color="#008080">&gt;</font>gr.spinellis.ckjm.ClassVisitor<font color="#008080">&lt;/classname&gt;</font><font color="#008080">&lt;</font><font color="#008080">WMC</font><font color="#008080">&gt;</font>13<font color="#008080">&lt;/WMC&gt;</font><font color="#008080">&lt;</font><font color="#008080">DIT</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/DIT&gt;</font><font color="#008080">&lt;</font><font color="#008080">NOC</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/NOC&gt;</font><font color="#008080">&lt;</font><font color="#008080">CBO</font><font color="#008080">&gt;</font>14<font color="#008080">&lt;/CBO&gt;</font><font color="#008080">&lt;</font><font color="#008080">RFC</font><font color="#008080">&gt;</font>71<font color="#008080">&lt;/RFC&gt;</font><font color="#008080">&lt;</font><font color="#008080">LCOM</font><font color="#008080">&gt;</font>34<font color="#008080">&lt;/LCOM&gt;</font><font color="#008080">&lt;</font><font color="#008080">Ca</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/Ca&gt;</font><font color="#008080">&lt;</font><font color="#008080">NPM</font><font color="#008080">&gt;</font>9<font color="#008080">&lt;/NPM&gt;&lt;/metric&gt;</font><br>
+<font color="#008080">&lt;</font><font color="#008080">metric</font><font color="#008080">&gt;&lt;</font><font color="#008080">classname</font><font color="#008080">&gt;</font>gr.spinellis.ckjm.ClassMap<font color="#008080">&lt;/classname&gt;</font><font color="#008080">&lt;</font><font color="#008080">WMC</font><font color="#008080">&gt;</font>3<font color="#008080">&lt;/WMC&gt;</font><font color="#008080">&lt;</font><font color="#008080">DIT</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/DIT&gt;</font><font color="#008080">&lt;</font><font color="#008080">NOC</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/NOC&gt;</font><font color="#008080">&lt;</font><font color="#008080">CBO</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/CBO&gt;</font><font color="#008080">&lt;</font><font color="#008080">RFC</font><font color="#008080">&gt;</font>21<font color="#008080">&lt;/RFC&gt;</font><font color="#008080">&lt;</font><font color="#008080">LCOM</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/LCOM&gt;</font><font color="#008080">&lt;</font><font color="#008080">Ca</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/Ca&gt;</font><font color="#008080">&lt;</font><font color="#008080">NPM</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/NPM&gt;&lt;/metric&gt;</font><br>
+<font color="#008080">&lt;</font><font color="#008080">metric</font><font color="#008080">&gt;&lt;</font><font color="#008080">classname</font><font color="#008080">&gt;</font>gr.spinellis.ckjm.PrintPlainResults<font color="#008080">&lt;/classname&gt;</font><font color="#008080">&lt;</font><font color="#008080">WMC</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/WMC&gt;</font><font color="#008080">&lt;</font><font color="#008080">DIT</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/DIT&gt;</font><font color="#008080">&lt;</font><font color="#008080">NOC</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/NOC&gt;</font><font color="#008080">&lt;</font><font color="#008080">CBO</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/CBO&gt;</font><font color="#008080">&lt;</font><font color="#008080">RFC</font><font color="#008080">&gt;</font>8<font color="#008080">&lt;/RFC&gt;</font><font color="#008080">&lt;</font><font color="#008080">LCOM</font><font color="#008080">&gt;</font>0<font color="#008080">&lt;/LCOM&gt;</font><font color="#008080">&lt;</font><font color="#008080">Ca</font><font color="#008080">&gt;</font>1<font color="#008080">&lt;/Ca&gt;</font><font color="#008080">&lt;</font><font color="#008080">NPM</font><font color="#008080">&gt;</font>2<font color="#008080">&lt;/NPM&gt;&lt;/metric&gt;</font><br>
+<font color="#008080">&lt;/ckjm&gt;</font><br>
+</font>
+
+</div>
+<p />
+To copy the <em>ckjm</em>'s output to the Microsoft Windows clipboard
+to later paste the results into an MS-Word table, simply
+pipe the output of <em>ckjm</em> to the <em>winclip</em> command of the
+<a href="../outwit">Outwit</a> tool suite.
+<p />
+You can also plot the results in various formats by using
+<a href="http://www.gnuplot.info">gnuplot</a> (<a href="http://www.gnuplot.info">http://www.gnuplot.info</a>).
+Here is a diagram depicting the distribution of the CBO metric within
+the classes of <a href="http://www.eclipse.org">Eclipse</a> (<a href="http://www.eclipse.org">http://www.eclipse.org</a>).<br />
+<img src="./eclipse-cbo.png" alt="the distribution of the CBO metric within the classes of Eclipse" />
+<h3>Metric Descriptions</h3>
+The metrics <em>ckjm</em> will calculate and display for
+each class are the following.
+<dl>
+<dt>WMC - Weighted methods per class</dt><dd>
+A class's <em>weighted methods per class</em> WMC
+metric is simply the sum of the complexities of its methods.
+As a measure of complexity we can use the cyclomatic complexity,
+or we can abritrarily assign a complexity value of 1 to each method.
+The <em>ckjm</em> program assigns a complexity value of 1 to each method,
+and therefore the value of the WMC is equal to the number of methods
+in the class.
+</dd><dt>DIT - Depth of Inheritance Tree</dt><dd>
+The <em>depth of inheritance tree</em> (DIT) metric provides
+for each class a measure of the inheritance levels from the object
+hierarchy top.
+In Java where all classes inherit Object the minimum value
+of DIT is 1.
+</dd><dt>NOC - Number of Children</dt><dd>
+A class's <em>number of children</em> (NOC)
+metric simply
+measures the number of immediate descendants of the class.
+</dd><dt>CBO - Coupling between object classes</dt><dd>
+The <em>coupling between object classes</em> (CBO)
+metric represents the number of classes coupled to a given
+class (efferent couplings, Ce).
+This coupling can occur through method calls,
+field accesses, inheritance, arguments, return types,
+and exceptions.
+</dd><dt>RFC - Response for a Class</dt><dd>
+The metric called the <em>response for a class</em> (RFC)
+measures the number of different
+methods that can be executed when an object of that
+class receives a message (when a method is invoked
+for that object).
+Ideally, we would want to find for each method
+of the class, the methods that class will call,
+and repeat this for each called method,
+calculating what is called the <em>transitive closure</em>
+of the method's call graph.
+This process can however be both expensive and quite
+inaccurate.
+In <em>ckjm</em>, we calculate a rough
+approximation to the response set
+by simply inspecting method calls within the class's
+method bodies.
+This simplification was also used in the 1994 Chidamber and Kemerer
+description of the metrics.
+</dd><dt>LCOM - Lack of cohesion in methods</dt><dd>
+A class's <em>lack of cohesion in methods</em> (LCOM)
+metric counts the sets of methods in a class that are not related
+through the sharing of some of the class's fields.
+The original definition of this metric
+(which is the one used in <em>ckjm</em>)
+considers all pairs of a class's methods.
+In some of these pairs both methods access at
+least one common field of the class, while in
+other pairs the two methods to not share any
+common field accesses.
+The lack of cohesion in methods is then calculated
+by subtracting from the number of method pairs
+that don't share a field access the number of
+method pairs that do.
+Note that subsequent definitions
+of this metric used as a measurement basis the number
+of disjoint graph components of the class's methods.
+Others modified the definition of connectedness to
+include calls between the methods of the class.
+The program <em>ckjm</em> follows the original (1994) definition
+by Chidamber and Kemerer.
+</dd><dt>Ca - Afferent couplings</dt><dd>
+A class's afferent couplings is a measure of how many other classes
+use the specific class.
+Ca is calculated using the same definition as that used for
+calculating CBO (Ce).
+</dd><dt>NPM - Number of Public Methods</dt><dd>
+The NPM metric simply counts all the methods in a class that
+are declared as public.
+It can be used to measure the size of an API provided by a package.
+</dd>
+</dl>
+<h3>Measurement Details</h3>
+The original definition of the metrics, and implementation details
+of both the program, and the Java language provide some leeway on
+how the metrics are measured.
+The following list contains the most important decisions.
+These are marked in the source code with a comment,
+such as the following.
+<div class="code">
+
+<font face="monospace">
+<font color="#0000ff">/* Measuring decision: couple interfaces */</font><br>
+</font>
+
+</div>
+<ul>
+<li> Interfaces are measured when considering a class's coupling.
+Rationale: changes to the interface may well require changes
+to the class.</li>
+<li> Use of Java SDK classes (java.*, javax.*, and some others)
+does not count toward a class's coupling.
+Rationale: the Java SDK classes are relatively stable,
+in comparison to the rest of the project.
+A command line argument switch (<code>-s</code>) is available for including
+the Java SDK classes into the calculation.</li>
+<li> Calls to JDK methods are included in the RFC calculation.
+Rationale: the method calls increase the class's complexity.</li>
+<li> The classes used for catching exceptions contribute toward the
+class's coupling measurements.
+Rationale: at the point where an exception is caught a new object
+of the corresponding type is instantiated.</li>
+<li> The complexity of each method is considered 1, when calculating WMC.
+Rationale: ease of implementation, and compatibility with Chidamber and Kemerer.</li>
+<li> LCOM is calculated following the 1994 paper description, and not
+by looking at disjoint graph components.
+Rationale: ease of implementation, and compatibility with Chidamber and Kemerer.</li>
+<li> RFC is calculated up to the first method call level, and not
+through the transitive closure of all method calls.
+Rationale: ease of implementation, and compatibility with Chidamber and Kemerer.</li>
+<li>A class's own methods contribute to its RFC.
+Rationale: the original Chidamber and Kemerer article describes RFC as a
+union of the set of methods called by the class and the set of methods in
+the class.
+</li>
+</ul>
+<h3>Using Ckjm With Ant</h3>
+First define the <em>ant</em> task in your <code>build.xml</code> file.
+The <em>ckjm</em> jar file should be in the classpath.
+
+<div class="code">
+
+<font face="monospace">
+<font color="#008080">&lt;</font><font color="#008080">taskdef</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;ckjm&quot;</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>classname</b></font>=<font color="#ff00ff">&quot;gr.spinellis.ckjm.ant.CkjmTask&quot;</font><font color="#008080">&gt;</font><br>
+&nbsp;&nbsp;<font color="#008080">&lt;</font><font color="#008080">classpath</font><font color="#008080">&gt;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#008080">&lt;</font><font color="#008080">pathelement</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>location</b></font>=<font color="#ff00ff">&quot;path/to/ckjm1-2.jar&quot;</font><font color="#008080">/&gt;</font><br>
+&nbsp;&nbsp;<font color="#008080">&lt;/classpath&gt;</font><br>
+<font color="#008080">&lt;/taskdef&gt;</font><br>
+</font>
+
+</div>
+Now you can make use of the <em>ckjm</em> task.
+The attributes of the <em>ckjm</em> task are the following:
+
+<dl>
+<dt>format</dt><dd>'plain' or 'xml'. Default is 'plain'</dd>
+<dt>outputfile</dt><dd>Required. Output will be written to outputfile.</dd>
+<dt>classdir</dt><dd>Required. Base directory which contains the class files.</dd>
+</dl>
+
+The <em>ckjm</em>
+task supports the nested elements &lt;include&gt; and &lt;exclude&gt;,
+which can be used to select the class files and the nested element
+&lt;extdirs&gt;, which is used to specify other class files participating in the
+inheritance hierarchy.
+The elements support
+<a href="http://ant.apache.org/manual/using.html#path">path-like structures</a> (<a href="http://ant.apache.org/manual/using.html#path">http://ant.apache.org/manual/using.html#path</a>).
+
+Example usage:
+<div class="code">
+
+<font face="monospace">
+<font color="#008080">&lt;</font><font color="#008080">ckjm</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>outputfile</b></font>=<font color="#ff00ff">&quot;ckjm.xml&quot;</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>format</b></font>=<font color="#ff00ff">&quot;xml&quot;</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>classdir</b></font>=<font color="#ff00ff">&quot;build/classes&quot;</font><font color="#008080">&gt;</font><br>
+&nbsp;&nbsp;<font color="#008080">&lt;</font><font color="#008080">include</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;**/*.class&quot;</font><font color="#008080">&nbsp;/&gt;</font><br>
+&nbsp;&nbsp;<font color="#008080">&lt;</font><font color="#008080">exclude</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;**/*Test.class&quot;</font><font color="#008080">&nbsp;/&gt;</font><br>
+&nbsp;&nbsp;<font color="#008080">&lt;</font><font color="#008080">extdirs</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>path</b></font>=<font color="#ff00ff">&quot;lib&quot;</font><font color="#008080">&nbsp;/&gt;</font><br>
+<font color="#008080">&lt;/ckjm&gt;</font><br>
+</font>
+
+</div>
+
+You can use an XSL stylesheet to generate an HTML report from the XML
+output file.
+
+Example:
+<div class="code">
+
+<font face="monospace">
+<font color="#008080">&lt;</font><font color="#008080">style</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>in</b></font>=<font color="#ff00ff">&quot;ckjm.xml&quot;</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>style</b></font>=<font color="#ff00ff">&quot;path/to/ckjm.xsl&quot;</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>out</b></font>=<font color="#ff00ff">&quot;ckjm.html&quot;</font><font color="#008080">&nbsp;/&gt;</font><br>
+</font>
+
+</div>
+
+The distribution contains in the <code>xsl</code> directory
+two sample XSL files.
+
+Here is a complete example of a build.xml file.
+<div class="code">
+
+<font face="monospace">
+<font color="#008080">&lt;</font><font color="#008080">project</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;myproject&quot;</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>default</b></font>=<font color="#ff00ff">&quot;ckjm&quot;</font><font color="#008080">&gt;</font><br>
+<br>
+<font color="#008080">&lt;</font><font color="#008080">target</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;compile&quot;</font><font color="#008080">&gt;</font><br>
+&nbsp;&nbsp;<font color="#0000ff">&lt;!</font><font color="#0000ff">-- your compile instructions --</font><font color="#0000ff">&gt;</font><br>
+<font color="#008080">&lt;/target&gt;</font><br>
+<br>
+<font color="#008080">&lt;</font><font color="#008080">target</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;ckjm&quot;</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>depends</b></font>=<font color="#ff00ff">&quot;compile&quot;</font><font color="#008080">&gt;</font><br>
+<br>
+&nbsp;&nbsp;<font color="#008080">&lt;</font><font color="#008080">taskdef</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;ckjm&quot;</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>classname</b></font>=<font color="#ff00ff">&quot;gr.spinellis.ckjm.ant.CkjmTask&quot;</font><font color="#008080">&gt;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#008080">&lt;</font><font color="#008080">classpath</font><font color="#008080">&gt;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#008080">&lt;</font><font color="#008080">pathelement</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>location</b></font>=<font color="#ff00ff">&quot;path/to/ckjm1-2.jar&quot;</font><font color="#008080">/&gt;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#008080">&lt;/classpath&gt;</font><br>
+&nbsp;&nbsp;<font color="#008080">&lt;/taskdef&gt;</font><br>
+<br>
+&nbsp;&nbsp;<font color="#008080">&lt;</font><font color="#008080">ckjm</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>outputfile</b></font>=<font color="#ff00ff">&quot;ckjm.xml&quot;</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>format</b></font>=<font color="#ff00ff">&quot;xml&quot;</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>classdir</b></font>=<font color="#ff00ff">&quot;build/classes&quot;</font><font color="#008080">&gt;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#008080">&lt;</font><font color="#008080">include</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;**/*.class&quot;</font><font color="#008080">&nbsp;/&gt;</font><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#008080">&lt;</font><font color="#008080">exclude</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;**/*Test.class&quot;</font><font color="#008080">&nbsp;/&gt;</font><br>
+&nbsp;&nbsp;<font color="#008080">&lt;/ckjm&gt;</font><br>
+<br>
+&nbsp;&nbsp;<font color="#008080">&lt;</font><font color="#008080">style</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>in</b></font>=<font color="#ff00ff">&quot;ckjm.xml&quot;</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>style</b></font>=<font color="#ff00ff">&quot;path/to/ckjm.xsl&quot;</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>out</b></font>=<font color="#ff00ff">&quot;ckjm.html&quot;</font><font color="#008080">&nbsp;/&gt;</font><br>
+<font color="#008080">&lt;/target&gt;</font><br>
+</font>
+
+</div>
+<p />
+If the analyzed files form part of a class hierarchy of other class files that
+are not part of the analysis, then the <code>extdirs</code>
+<a href="http://ant.apache.org/manual/using.html#path">path-like structure</a> (<a href="http://ant.apache.org/manual/using.html#path">http://ant.apache.org/manual/using.html#path</a>)
+of the <em>ckjm</em> task must be set to point to the directory containing
+the corresponding <em>jar</em> files.
+This will internally set the java.ext.dirs property so that
+<em>ckjm</em> can locate the jar files containing those classes.
+<h3>Web Links and Acknowledgements</h3>
+<h4>Related Links</h4>
+<ul>
+<li><a href="http://javaboutique.internet.com/tutorials/codemetrics/">Metrics for Object Oriented Software Development</a> (<a href="http://javaboutique.internet.com/tutorials/codemetrics/">http://javaboutique.internet.com/tutorials/codemetrics/</a>)</li>
+<li><a href="http://jakarta.apache.org/bcel/">BCEL - Byte Code Engineering Library</a> (<a href="http://jakarta.apache.org/bcel/">http://jakarta.apache.org/bcel/</a>)</li>
+<li><a href="http://www.dmst.aueb.gr/dds/blog/20050211/">An Open Source Java Metrics Toolset Is Hard to Find</a> (<a href="http://www.dmst.aueb.gr/dds/blog/20050211/">http://www.dmst.aueb.gr/dds/blog/20050211/</a>)</li>
+</ul>
+<h4>Derived Software</h4>
+<ul>
+<li><a href="http://gromit.iiar.pwr.wroc.pl/p_inf/ckjm/">CKJM Pro</a> (<a href="http://gromit.iiar.pwr.wroc.pl/p_inf/ckjm/">http://gromit.iiar.pwr.wroc.pl/p_inf/ckjm/</a>) adds many quality-oriented metrics</li>
+</ul>
+<p>
+This product includes software developed by the
+<a href="http://www.apache.org/">Apache Software Foundation</a> (<a href="http://www.apache.org/">http://www.apache.org/</a>).
+</p>
+<h3>Bibliography</h3>
+<!-- BEGIN BIBLIOGRAPHY tmp -->
+
+<!--
+    DO NOT MODIFY THIS BIBLIOGRAPHY BY HAND!  IT IS MAINTAINED AUTOMATICALLY!
+    YOUR CHANGES WILL BE LOST THE NEXT TIME IT IS UPDATED!
+-->
+<!-- Generated by: /dds/src/textproc/bib2xhtml/bib2xhtml.pl -u -m /dds/bib/macro -b -include-directory=/dds/pubs/bibhtml tmp.bib -->
+
+<ul class="bib2xhtml">
+
+<!-- Authors: Rajendra K Bandi and Vijay K Vaishnavi and Daniel E Turk -->
+
+<li><a name="BVT03">Rajendra</a> K. Bandi,
+  Vijay K. Vaishnavi, and Daniel E. Turk.
+Predicting maintenance performance using object-oriented design complexity
+  metrics.
+<cite>IEEE Transactions on Software Engineering</cite>, 29(1):77–87, 2003.
+(<a href="http://dx.doi.org/10.1109/TSE.2003.1166590">doi:10.1109/TSE.2003.1166590</a> (<a href="http://dx.doi.org/10.1109/TSE.2003.1166590">http://dx.doi.org/10.1109/TSE.2003.1166590</a>))<p /></li>
+
+<!-- Authors: Victor R Basili and Lionel C Briand and Walcelio L Melo -->
+
+<li><a name="BBM96">Victor</a> R. Basili,
+  Lionel C. Briand, and Walcélio L. Melo.
+A validation of object-oriented design metrics as quality indicators.
+<cite>IEEE Transactions on Software Engineering</cite>, 22(10):751–761,
+  1996.
+(<a href="http://dx.doi.org/10.1109/32.544352">doi:10.1109/32.544352</a> (<a href="http://dx.doi.org/10.1109/32.544352">http://dx.doi.org/10.1109/32.544352</a>))<p /></li>
+
+<!-- Authors: Shyam R Chidamber and Chris F Kemerer -->
+
+<li><a name="CK94">Shyam</a> R. Chidamber
+  and Chris F. Kemerer.
+A metrics suite for object oriented design.
+<cite>IEEE Transactions on Software Engineering</cite>, 20(6):476–493, 1994.
+(<a href="http://dx.doi.org/10.1109/32.295895">doi:10.1109/32.295895</a> (<a href="http://dx.doi.org/10.1109/32.295895">http://dx.doi.org/10.1109/32.295895</a>))<p /></li>
+
+<!-- Authors: Shyam R Chidamber and David P Darcy and Chris F Kemerer -->
+
+<li><a name="CDK98">Shyam</a> R. Chidamber,
+  David P. Darcy, and Chris F. Kemerer.
+Managerial use of metrics for object-oriented software: An exploratory
+  analysis.
+<cite>IEEE Transactions on Software Engineering</cite>, 24(8):629–639, 1998.
+(<a href="http://dx.doi.org/10.1109/32.707698">doi:10.1109/32.707698</a> (<a href="http://dx.doi.org/10.1109/32.707698">http://dx.doi.org/10.1109/32.707698</a>))<p /></li>
+
+<!-- Authors: Rudolf Ferenc and Istvan Siket and Tibor Gyimothy -->
+
+<li><a name="FSG04">Rudolf</a> Ferenc, István
+  Siket, and Tibor Gyimóthy.
+<a href="http://www.amazon.com/dp/0769522130/?tag=dds-20">Extracting facts from
+  open source software</a>.
+In <cite>ICSM '04: Proceedings of the 20th IEEE International Conference on
+  Software Maintenance (ICSM'04)</cite>, pages 60–69. IEEE Computer Society,
+  2004.<p /></li>
+
+<!-- Authors: Henderson Sellers Brian L and Constantine Larry L and Graham Ian
+  M -->
+<li><a name="HCG96">Brian</a> L.
+  Henderson-Sellers, Larry L. Constantine, and Ian M. Graham.
+Coupling and cohesion: Towards a valid metrics suite for object-oriented
+  analysis and design.
+<cite>Object Oriented Systems</cite>, 3(3):143–158, 1996.<p /></li>
+
+<!-- Authors: Brian Henderson Sellers -->
+
+<li><a name="Sel96">Brian</a>
+  Henderson-Sellers.
+<cite>Object-Oriented Metrics: Measures of Complexity</cite>.
+Prentice-Hall, Englewood Cliffs, NJ, 1996.<p /></li>
+
+<!-- Authors: Martin Hitz and Behzad Montazeri -->
+
+<li><a name="HM96">Martin</a> Hitz and
+  Behzad Montazeri.
+Chidamber and Kemerer's metrics suite: A measurement theory perspective.
+<cite>IEEE Transactions on Software Engineering</cite>, 22(4):267–271, 1996.
+(<a href="http://dx.doi.org/10.1109/32.491650">doi:10.1109/32.491650</a> (<a href="http://dx.doi.org/10.1109/32.491650">http://dx.doi.org/10.1109/32.491650</a>))<p /></li>
+
+<!-- Authors: Tobias Mayer and Tracy Hall -->
+
+<li><a name="MH99">Tobias</a> Mayer and Tracy
+  Hall.
+A critical analysis of current OO design metrics.
+<cite>Software Quality Control</cite>, 8(2):97–110, 1999.
+(<a href="http://dx.doi.org/10.1023/A:1008900825849">doi:10.1023/A:1008900825849</a> (<a href="http://dx.doi.org/10.1023/A:1008900825849">http://dx.doi.org/10.1023/A:1008900825849</a>))<p /></li>
+
+<!-- Authors: Sandeep Purao and Vijay Vaishnavi -->
+
+<li><a name="PV03">Sandeep</a> Purao and
+  Vijay Vaishnavi.
+Product metrics for object-oriented systems.
+<cite>ACM Computing Surveys</cite>, 35(2):191–221, 2003.
+(<a href="http://dx.doi.org/10.1145/857076.857090">doi:10.1145/857076.857090</a> (<a href="http://dx.doi.org/10.1145/857076.857090">http://dx.doi.org/10.1145/857076.857090</a>))<p /></li>
+
+<!-- Authors: Linda Rosenberg and Ruth Stapko and Al Gallo -->
+
+<li><a name="RSG99b">Linda</a> Rosenberg,
+  Ruth Stapko, and Al Gallo.
+<a href="http://www.software.org/metrics99/rosenberg.ppt">Applying
+  object-oriented metrics</a>.
+In <cite>Sixth International Symposium on Software Metrics—Measurement for
+  Object-Oriented Software Projects Workshop</cite>, November 1999.
+Presentation available online
+  <a href="http://www.software.org/metrics99/rosenberg.ppt">http://www.software.org/metrics99/rosenberg.ppt</a> (<a href="http://www.software.org/metrics99/rosenberg.ppt">http://www.software.org/metrics99/rosenberg.ppt</a>) (December 2005).<p
+  /></li>
+
+<!-- Authors: Linda Rosenberg and Ruth Stapko and Al Gallo -->
+
+<li><a name="RSG99">Linda</a> Rosenberg, Ruth
+  Stapko, and Al Gallo.
+<a href="http://sel.gsfc.nasa.gov/website/sew/1999/topics/rosenberg_SEW99paper.pdf">Risk-based
+  object oriented testing</a>.
+In <cite>Twenty-Fourth Annual Software Engineering Workshop</cite>. NASA,
+  Software Engineering Laboratory, December 1999.<p /></li>
+
+<!-- Authors: Linda H Rosenberg -->
+
+<li><a name="Ros98">Linda</a> H. Rosenberg.
+<a href="http://www.literateprogramming.com/ooapply.pdf">Applying and
+  interpreting object oriented metrics</a>.
+In <cite>Software Technology Conference '98</cite>, 1998.<p /></li>
+
+<!-- Authors: Diomidis Spinellis -->
+
+<li><a name="Spi05g">Diomidis</a> Spinellis.
+<a href="http://www.dmst.aueb.gr/dds/pubs/jrnl/2005-IEEESW-TotT/html/v22n4.html">Tool
+  writing: A forgotten art?</a>.
+<cite>IEEE Software</cite>, 22(4):9–11, July/August 2005.
+(<a href="http://dx.doi.org/10.1109/MS.2005.111">doi:10.1109/MS.2005.111</a> (<a href="http://dx.doi.org/10.1109/MS.2005.111">http://dx.doi.org/10.1109/MS.2005.111</a>))<p /></li>
+
+<!-- Authors: Diomidis Spinellis -->
+
+<li><a name="Spi06">Diomidis</a> Spinellis.
+<a href="http://www.spinellis.gr/codequality"><cite>Code Quality: The Open
+  Source Perspective</cite></a>.
+Addison-Wesley, Boston, MA, 2006.<p /></li>
+
+</ul>
+
+<!-- END BIBLIOGRAPHY tmp -->
+
+<h3>Version History</h3>
+<dl>
+
+<dt>Version 1.9 2012-04-04</dt><dd>
+<ul>
+<li> Integrated BCEL 5.2 (Andre Fleischer).</li>
+<li> Fixed <code>java.lang.NoSuchMethodError: org.apache.bcel.classfile.JavaClass.getSuperClasses()</code>.</li>
+<li> Migrated source code repository to git and GitHub.</li>
+</ul>
+</dd>
+
+<dt>Version 1.8 2007-07-25 </dt><dd>
+<ul>
+<li> Contributed code contains Ruby scripts that plot ckjm metrics as charts.</li>
+<li> The DIT calculation now also takes into account classes that are not
+directly processed.
+This may require explicitly setting up the java.ext.dirs property so that
+<em>ckjm</em> can locate the jar files containing those classes.
+Example:
+<div class="code">
+
+<font face="monospace">
+java&nbsp;<font color="#6a5acd">-Djava</font>.<font color="#008080">ext.dirs</font>=lib&nbsp;<font color="#6a5acd">-jar</font>&nbsp;ckjm<font color="#ff00ff">-1</font>.<font color="#ff00ff">8</font>.jar *.class<br>
+</font>
+
+</div>
+In the corresponding <em>ant</em> task, the new <code>extdirs</code>
+<a href="http://ant.apache.org/manual/using.html#path">path-like structure</a> (<a href="http://ant.apache.org/manual/using.html#path">http://ant.apache.org/manual/using.html#path</a>)
+of the <em>ckjm</em> task will accomplish the same function.
+Example:
+<div class="code">
+
+<font face="monospace">
+<font color="#008080">&lt;</font><font color="#008080">ckjm</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>outputfile</b></font>=<font color="#ff00ff">&quot;hsqldb.xml&quot;</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>format</b></font>=<font color="#ff00ff">&quot;xml&quot;</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>classdir</b></font>=<font color="#ff00ff">&quot;/app/hsqldb/classes&quot;</font><font color="#008080">&gt;</font><br>
+&nbsp;&nbsp;<font color="#008080">&lt;</font><font color="#008080">extdirs</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>path</b></font>=<font color="#ff00ff">&quot;/app/hsqldb/lib&quot;</font><font color="#008080">&nbsp;/&gt;</font><br>
+&nbsp;&nbsp;<font color="#008080">&lt;</font><font color="#008080">include</font><font color="#008080">&nbsp;</font><font color="#2e8b57"><b>name</b></font>=<font color="#ff00ff">&quot;**/*.class&quot;</font><font color="#008080">&nbsp;/&gt;</font><br>
+<font color="#008080">&lt;/ckjm&gt;</font><br>
+</font>
+
+</div>
+(This issue was discovered by 최재영(Choi Jae Young).)
+</li>
+</ul>
+</dd>
+
+<dt>Version 1.7 2006-04-14</dt><dd>
+<ul>
+<li> Improve source code organization </li>
+<li> Add javadoc documentation </li>
+</ul>
+</dd>
+
+<dt>Version 1.6 2005-11-05</dt><dd>
+<ul>
+<li> Fix confusion between afferent and efferent couplings. (noted by Christian Hansen)</li>
+</ul>
+</dd>
+
+<dt>Version 1.5 2005-10-15</dt><dd>
+<ul>
+<li> Add number of public methods (NPM) metric.</li>
+<li> Declared exceptions affect coupling measurements (Antti Pöyhönen).</li>
+<li> Option to report only public classes.</li>
+<li> Count number of public methods.</li>
+<li> Calls to different overloaded methods are measured separately (Antti Pöyhönen.</li>
+<li> The XSL transformations are now more intelligent,
+and therefore easier to modify. (Julien Rentrop). </li>
+</ul>
+</dd>
+
+<dt>Version 1.4 2005-07-30</dt><dd>
+<ul>
+<li> Added new class metric: efferent couplings (Ce). </li>
+<li> Added command-line switch -s to enable the processing of the Java SDK
+classes. </li>
+</ul>
+</dd>
+
+<dt>Version 1.3 2005-06-02</dt><dd>
+<ul>
+<li> Also count own class's methods when measuring RFC (Antti Pöyhönen). </li>
+</ul>
+</dd>
+
+<dt>Version 1.2 2005-05-11</dt><dd>
+<ul>
+<li> Fix problem where processing JRE would hang following Object's parent (Object). </li>
+<li> Add Ant task, XML output, and XSL files. (Julien Rentrop). </li>
+</ul>
+</dd>
+
+<dt>Version 1.1 2005-02-21</dt><dd>
+<ul>
+<li> First public release. </li>
+</ul>
+</dd>
+
+</dl>
+
+<h3>Frequently Asked Questions</h3>
+
+<!--
+To update the table of contents execute the following vim command from a register
+/^<h4>Contents^jjma/ul>^kmb/^$^"qyy:g/^<a name/s,<a name="\([^>]*\)><h4>\(.*\)</a></h4>,<li> <a href="\#\1>\2</a><\/li>,|y Q|u^'ad'b"qP
+-->
+
+<h4>Contents</h4>
+<ul>
+
+<li> <a href="#varhand">The metrics calculated by the program do not agree with those I calculate by hand.  How come?</a></li>
+<li> <a href="#jar">How can I process class files located in a jar file?</a></li>
+<li> <a href="#jdk14">How can I run the tool in a JDK 1.4 environment?</a></li>
+<li> <a href="#extdirs">I'm getting a ClassNotFoundException.  How can I fix it?</a></li>
+<li> <a href="#cite">I'm using <em>ckjm</em> in my research.  How shall I cite it?</a></li>
+<li> <a href="#spaces">How can I deal with directory names containing spaces?</a></li>
+</ul>
+
+<h4><a name="varhand">The metrics calculated by the program do not agree with those I calculate by hand.  How come?</a></h4>
+The <em>ckjm</em> program calculates the metrics from the code
+appearing in the compiled bytecode files.
+The Java compiler optimizes away some elements of the code
+(for example <code>static final</code> fields, and these do not
+take part in the calculations.
+You may want to consult the disassembled code
+(using a command like <code>javap -c -private</code> to see
+what elements <em>ckjm</em> takes into account.
+
+<h4><a name="jar">How can I process class files located in a jar file?</a></h4>
+See the documentation section titled
+<a href="insel.html">Using Pipelines to Select Classes</a>.
+
+<h4><a name="jdk14">How can I run the tool in a JDK 1.4 environment?</a></h4>
+You can use the open source tool <a href="http://retroweaver.sf.net">retroweaver</a> (<a href="http://retroweaver.sf.net">http://retroweaver.sf.net</a>)
+to create a backwards-compatible jar file.
+(Suggested by Paul King).
+
+<h4><a name="extdirs">I'm getting a ClassNotFoundException.  How can I fix it?</a></h4>
+If you are getting messages like the one below, it means that <em>ckjm</em>
+can't locate the code for the corresponding classes, in order to properly
+calculate the depth of the inheritance tree (DIT) metric.
+<code>
+java.lang.ClassNotFoundException: Exception while looking for class
+javax.servlet.http.HttpServlet: java.io.IOException:
+Couldn't find: javax.servlet.http.HttpServlet.class
+</code>
+To solve this problem you must explicitly setup the
+<code>java.ext.dirs</code> property pointing to a directory containing
+the <em>jar</em> files where <em>ckjm</em> can locate those classes.
+Example:
+<code>
+java -Djava.ext.dirs=lib -jar ckjm-1.8.jar *.class
+</code>
+<h4><a name="cite">I'm using <em>ckjm</em> in my research.  How shall I cite it?</a></h4>
+Please cite the following article, which describes <em>ckjm</em>
+and the rationale of its design.
+<blockquote>
+<p>
+Diomidis Spinellis.
+<a href="http://www.dmst.aueb.gr/dds/pubs/jrnl/2005-IEEESW-TotT/html/v22n4.html">Tool writing: A forgotten art?</a> (<a href="http://www.dmst.aueb.gr/dds/pubs/jrnl/2005-IEEESW-TotT/html/v22n4.html">http://www.dmst.aueb.gr/dds/pubs/jrnl/2005-IEEESW-TotT/html/v22n4.html</a>).
+<cite>IEEE Software</cite>, 22(4):9-11, July/August 2005.
+(<a href="http://dx.doi.org/10.1109/MS.2005.111">doi:10.1109/MS.2005.111</a> (<a href="http://dx.doi.org/10.1109/MS.2005.111">http://dx.doi.org/10.1109/MS.2005.111</a>))
+</p>
+</blockquote>
+<h4><a name="spaces">How can I deal with directory names containing spaces?</a></h4>
+It's best to avoid putting spaces in file and directory names, because
+these can confuse many Unix-related tools that use spaces to separate
+arguments.
+If you can't avoid them, here are two tricks for getting around the problem.
+In a Windows environment use <em>dir /x</em> on the command line to
+obtain the short (8.3) name of the corresponding directory.
+On a Unix machine create a symbolic from the directory containing spaces
+to a directory without spaces, and use that second name:
+<div class="code">
+
+<font face="monospace">
+ln&nbsp;<font color="#6a5acd">-s</font>&nbsp;<font color="#804040"><b>'</b></font><font color="#ff00ff">/path/to/directory with spaces/</font><font color="#804040"><b>'</b></font>&nbsp;/tmp/shortname<br>
+</font>
+
+</div>
+<h3>Contributors</h3>
+<dl>
+<dt>Panagiotis Louridas</dt><dd>Fix for a script in the documentation</dd>
+<dt>Antti Pöyhönen</dt><dd>RFC fix, count exceptions</dd>
+<dt>Julien Rentrop</dt><dd>XML output and Ant task</dd>
+</dl>
+
+<ul class="docnav">
+<li class="contents">
+<a href="idxprint.html" id="contents"><strong></strong>Contents</a>
+</li></ul>
+
+
+<p class="footer">
+<!--Creative Commons License--><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/gr/deed.en"><img align="left" alt="Creative Commons License" style="border-width:0" src="http://creativecommons.org/images/public/somerights20.png"/></a>
+&nbsp;Last change: Sunday, August 11, 2013 3:58 pm
+<br />
+&nbsp;Unless otherwise expressly stated, all original material on this page
+created by Diomidis Spinellis is licensed under a
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/gr/deed.en">Creative Commons Attribution-Share Alike 3.0 Greece License</a>.
+</p>
+</body>
+</html>

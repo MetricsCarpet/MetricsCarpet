@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+<title>Operation</title>
+
+<meta name="Generator" content="$Id: thread.pl 1.62 2006/09/19 16:53:01 dds Exp $" />
+<meta name="Author" content="Diomidis Spinellis" />
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:dds@aueb.gr" />
+<link rel="ToC" href="index.html" />
+<link rev="Subdocument" href="index.html" />
+<link rel="previous" href="./intro.html" />
+<link rel="next" href="./insel.html" />
+
+<style type="text/css">
+p.footer {font-size: 70%}
+pre { padding:4px; background-color: #eeeeee; border: 1px solid #000080;  }
+p.footer { FONT-FAMILY: tahoma; FONT-SIZE: 70%; COLOR: #505050; MARGIN-TOP: 0px; }
+h1 { background-color: #ffff99; border-left: #a0a0a0 10px solid; padding: 1px 4px 1px 15px; }
+hr { height: 1px; margin-top:1em; }
+</style>
+<!-- LS-START --><script language="vbscript">
+sub document_onKeyDown()
+   keypressed = window.event.keyCode
+   select case keypressed
+     case 78 'ALT-B
+        document.all("next").click
+     case 80 'ALT-P
+        document.all("previous").click
+     case 67 'ALT-C
+        document.all("contents").click
+   end select
+end sub
+</script><!-- LS-END -->
+</head>
+<body>
+<h1>Operation</h1>
+To run <em>ckjm</em> you must run java with the <code>-jar</code>
+flag, providing as its argument the location of the file
+<code>ckjm.jar</code>.
+Next, you can specify as arguments the Java class files you want
+to analyze.
+<br />
+Example:
+<pre>
+java <font color="#6a5acd">-jar</font> /usr/local/lib/ckjm<font color="#ff00ff">-1</font>.<font color="#ff00ff">5</font>.jar build/classes/gr/spinellis/ckjm/*.class
+</pre>
+(Replace the sequence <code>/usr/local/lib/ckjm-1.5.jar</code>
+with the actual path and filename of the <em>ckjm</em> version you are using.)
+<p />
+The command's output will be a list of class names (prefixed by the
+package they are defined in), followed by the corresponding
+metrics for that class: WMC, DIT, NOC, CBO, RFC, LCOM, Ce, and NPM.
+<pre>
+gr.spinellis.ckjm.ClassMetricsContainer 3 1 0 3 18 0 2 2
+gr.spinellis.ckjm.MethodVisitor 11 1 0 21 40 0 1 8
+gr.spinellis.ckjm.CkjmOutputHandler 1 1 0 1 1 0 3 1
+gr.spinellis.ckjm.ClassMetrics 24 1 0 0 33 196 6 23
+gr.spinellis.ckjm.MetricsFilter 7 1 0 6 30 11 2 5
+gr.spinellis.ckjm.ClassVisitor 13 1 0 14 71 34 2 9
+gr.spinellis.ckjm.ClassMap 3 1 0 1 21 0 0 2
+gr.spinellis.ckjm.PrintPlainResults 2 1 0 2 8 0 1 2
+</pre>
+<p />
+If the classes are located in a <em>jar</em> archive, you can
+specify as a single argument the name of the archive,
+followed by a space, followed by the name of the class in the archive.
+<pre>
+java <font color="#6a5acd">-jar</font> /usr/local/lib/ckjm.jar <font color="#804040"><b>'</b></font><font color="#ff00ff">ant-jai.jar   org/apache/tools/ant/types/optional/image/Text.class</font><font color="#804040"><b>'</b></font>
+</pre>
+<p />
+Finally, instead of specifying the classes to be analyszed as the
+command's arguments, you pass them (as class files, or as jar file, class
+file pairs) on the command's standard input.
+The following example will process all class files located in the
+build directory.
+<pre>
+find build <font color="#6a5acd">-name</font> <font color="#804040"><b>'</b></font><font color="#ff00ff">*.class</font><font color="#804040"><b>'</b></font> <font color="#6a5acd">-print</font> <font color="#804040"><b>|</b></font> java <font color="#6a5acd">-jar</font> /usr/local/lib/ckjm.jar
+</pre>
+<p />
+The program, by default, will not take into account classes that belong
+to the Java SDK packages.
+The command-line option switch <code>-s</code>, can be used to enable this
+processing.
+<p>
+<table width="100%"><tr><td class="navigate"><a href="index.html" accesskey="C" id="contents">Contents</a> </td><td align="right" class="navigate"><a href="./intro.html" accesskey="P" id="previous">&laquo;&nbsp;Previous</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="./insel.html" accesskey="N" id="next">Next (Using Pipelines to Select Classes)&nbsp;&raquo;</a></td></tr></table></p>
+
+
+<hr /> <p class="footer">
+<!--Creative Commons License--><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/gr/deed.en"><img align="left" alt="Creative Commons License" style="border-width:0" src="http://creativecommons.org/images/public/somerights20.png"/></a>
+&nbsp;Last change: Thursday, April 5, 2007 4:11 pm
+<br />
+&nbsp;Unless otherwise expressly stated, all original material on this page
+created by Diomidis Spinellis is licensed under a
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/gr/deed.en">Creative Commons Attribution-Share Alike 3.0 Greece License</a>.
+</p>
+</body>
+</html>
