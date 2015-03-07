@@ -22,4 +22,4 @@ def test_pmd_tool():
     tool = PmdTool()
     tool.attach_to_experiment(experiment)
     tool.measure_file(source_file)
-    #assert False
+    assert False
