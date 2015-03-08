@@ -33,8 +33,12 @@ class SoftwareProduct(object):
             raise Exception('Unknown language: %s' % language)
         return find_files(path=location, match=source_code_files)
 
+    def get_source_path(self, version):
+        '''Returns a full path to a tested version.'''
+        return os.path.join(self.location_path, version)
+
     def get_source_files(self, version):
-        location = os.path.join(self.location_path, version)
+        location = self.get_source_path(version)
         return SoftwareProduct._find_source_files(self.language, location)
 
     def get_all_source_files(self):
