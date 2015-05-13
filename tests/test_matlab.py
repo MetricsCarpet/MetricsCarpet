@@ -46,4 +46,10 @@ def test_matlab_foo():
     product = FooProduct(MATLAB_TOOL_PATH)
     print 'This might take some times, since it starts MATLAB'
     tool.measure(product)
-    assert False
+
+
+def test_matlab_on_infectio():
+    experiment = Experiment('test_matlab_on_infectio')
+    tool = MatlabTool()
+    tool.attach_to_experiment(experiment)
+
