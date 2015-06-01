@@ -1,0 +1,551 @@
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules
+END
+RescaleIntensity.m
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/RescaleIntensity.m
+END
+Morph.m
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/Morph.m
+END
+DisplayImageHistogram.m
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/DisplayImageHistogram.m
+END
+MeasureImageGranularity.m
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/MeasureImageGranularity.m
+END
+CorrectIllumination_Apply.m
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/CorrectIllumination_Apply.m
+END
+DICTransform.m
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/DICTransform.m
+END
+SmoothOrEnhance.m
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/SmoothOrEnhance.m
+END
+CreateWebPage.m
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/CreateWebPage.m
+END
+MaskImage.m
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/MaskImage.m
+END
+IdentifySecPropagateSubfunction.mexglx
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/IdentifySecPropagateSubfunction.mexglx
+END
+CorrectIllumination_Calculate.m
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/CorrectIllumination_Calculate.m
+END
+OverlayOutlines.m
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/OverlayOutlines.m
+END
+CalculateMath.m
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/CalculateMath.m
+END
+IdentifySecPropagateSubfunction.mexmac
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/IdentifySecPropagateSubfunction.mexmac
+END
+SpeedUpCellProfiler.m
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/SpeedUpCellProfiler.m
+END
+MeasureImageAreaOccupied.m
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/MeasureImageAreaOccupied.m
+END
+MakeProjection.m
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/MakeProjection.m
+END
+DisplayMeasurement.m
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/DisplayMeasurement.m
+END
+IdentifySecPropagateSubfunction.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/IdentifySecPropagateSubfunction.cpp
+END
+PauseCellProfiler.m
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/PauseCellProfiler.m
+END
+sample_sub.mexmaci
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/sample_sub.mexmaci
+END
+sample_sub.mexw32
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/sample_sub.mexw32
+END
+Restart.m
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/Restart.m
+END
+ClassifyObjects.m
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/ClassifyObjects.m
+END
+InvertForPrinting.m
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/InvertForPrinting.m
+END
+CalculateImageOverlap.m
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/CalculateImageOverlap.m
+END
+Exclude.m
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/Exclude.m
+END
+Align.m
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/Align.m
+END
+ImageMath.m
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/ImageMath.m
+END
+FlipAndRotate.m
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/FlipAndRotate.m
+END
+Tile.m
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/Tile.m
+END
+Resize.m
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/Resize.m
+END
+MeasureCorrelation.m
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/MeasureCorrelation.m
+END
+GrayToColor.m
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/GrayToColor.m
+END
+ExportToExcel.m
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/ExportToExcel.m
+END
+IdentifyPrimLoG.m
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/IdentifyPrimLoG.m
+END
+LoadImageDirectory.m
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/LoadImageDirectory.m
+END
+sample_sub.mexmac
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/sample_sub.mexmac
+END
+MeasureNeurons.m
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/MeasureNeurons.m
+END
+Combine.m
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/Combine.m
+END
+MeasureImageQuality.m
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/MeasureImageQuality.m
+END
+TrackObjects.m
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/TrackObjects.m
+END
+MeasureTexture.m
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/MeasureTexture.m
+END
+DisplayHistogram.m
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/DisplayHistogram.m
+END
+IdentifySecondary.m
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/IdentifySecondary.m
+END
+SaveImages.m
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/SaveImages.m
+END
+ConvertToImage.m
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/ConvertToImage.m
+END
+SubtractBackground.m
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/SubtractBackground.m
+END
+FindEdges.m
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/FindEdges.m
+END
+CreateBatchFiles.m
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/CreateBatchFiles.m
+END
+MeasureObjectNeighbors.m
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/MeasureObjectNeighbors.m
+END
+GroupMovieFrames.m
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/GroupMovieFrames.m
+END
+RenameOrRenumberFiles.m
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/RenameOrRenumberFiles.m
+END
+DifferentiateStains.m
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/DifferentiateStains.m
+END
+KeepLargestObject.m
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/KeepLargestObject.m
+END
+ExpandOrShrink.m
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/ExpandOrShrink.m
+END
+DisplayDataOnImage.m
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/DisplayDataOnImage.m
+END
+IdentifySecPropagateSubfunction.mexa64
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/IdentifySecPropagateSubfunction.mexa64
+END
+EditObjectsManually.m
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/EditObjectsManually.m
+END
+CalculateStatistics.m
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/CalculateStatistics.m
+END
+FilterByObjectMeasurement.m
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/FilterByObjectMeasurement.m
+END
+IdentifyTertiarySubregion.m
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/IdentifyTertiarySubregion.m
+END
+MeasureRadialDistribution.m
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/MeasureRadialDistribution.m
+END
+IdentifySecPropagateSubfunction.mexmaci
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/IdentifySecPropagateSubfunction.mexmaci
+END
+IdentifyObjectsInGrid.m
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/IdentifyObjectsInGrid.m
+END
+LoadText.m
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/LoadText.m
+END
+LoadSingleImage.m
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/LoadSingleImage.m
+END
+IdentifySecPropagateSubfunction.mexw64
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/IdentifySecPropagateSubfunction.mexw64
+END
+DisplayGridInfo.m
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/DisplayGridInfo.m
+END
+SplitOrSpliceMovie.m
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/SplitOrSpliceMovie.m
+END
+MeasureObjectIntensity.m
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/MeasureObjectIntensity.m
+END
+DefineGrid.m
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/DefineGrid.m
+END
+IdentifyPrimManual.m
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/IdentifyPrimManual.m
+END
+SendEmail.m
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/SendEmail.m
+END
+ApplyThreshold.m
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/ApplyThreshold.m
+END
+MeasureObjectAreaShape.m
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/MeasureObjectAreaShape.m
+END
+Crop.m
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/Crop.m
+END
+ColorToGray.m
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/ColorToGray.m
+END
+LoadImages.m
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/LoadImages.m
+END
+LabelImages.m
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/LabelImages.m
+END
+ClassifyObjectsByTwoMeasurements.m
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/ClassifyObjectsByTwoMeasurements.m
+END
+FlagImageForQC.m
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/FlagImageForQC.m
+END
+ExportToDatabase.m
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/ExportToDatabase.m
+END
+IdentifyPrimAutomatic.m
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/IdentifyPrimAutomatic.m
+END
+MeasureImageIntensity.m
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/MeasureImageIntensity.m
+END
+Relate.m
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/Relate.m
+END
+PlaceAdjacent.m
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/PlaceAdjacent.m
+END
+RelabelObjects.m
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/RelabelObjects.m
+END
+sample_sub.c
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/sample_sub.c
+END
+FileNameMetadata.m
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/FileNameMetadata.m
+END
+IdentifySecPropagateSubfunction.mexw32
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/Modules/IdentifySecPropagateSubfunction.mexw32
+END

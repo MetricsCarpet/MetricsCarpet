@@ -1,0 +1,119 @@
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools
+END
+PlotMeasurement.m
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/PlotMeasurement.m
+END
+ExportLocations.m
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/ExportLocations.m
+END
+Histogram.m
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/Histogram.m
+END
+ShowPlateMapData.m
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/ShowPlateMapData.m
+END
+MeasurementCalculator.m
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/MeasurementCalculator.m
+END
+CalculateStatisticsDataTool.m
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/CalculateStatisticsDataTool.m
+END
+MergeOutputFiles.m
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/MergeOutputFiles.m
+END
+ViewData.m
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/ViewData.m
+END
+SubmitBatch.m
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/SubmitBatch.m
+END
+ConvertBatchFiles.m
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/ConvertBatchFiles.m
+END
+ExportDatabase.m
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/ExportDatabase.m
+END
+CalculateRatiosDataTool.m
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/CalculateRatiosDataTool.m
+END
+DataLayout.m
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/DataLayout.m
+END
+GenerateHistogramMovie.m
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/GenerateHistogramMovie.m
+END
+ShowDataOnImage.m
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/ShowDataOnImage.m
+END
+ExportData.m
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/ExportData.m
+END
+FlagImageByMeasurement.m
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/FlagImageByMeasurement.m
+END
+ClearData.m
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/ClearData.m
+END
+AddData.m
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/CellProfiler/!svn/ver/9633/branches/CellProfiler2.0Beta/CellProfiler_old_matlab/DataTools/AddData.m
+END

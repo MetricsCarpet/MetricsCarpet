@@ -79,7 +79,7 @@ function [lineCount,commentCount] = getLineCounts(filename)
 
 % Count code lines.  It does not include the lines of comments or blank
 % lines. If a statement is continued on many lines it counts as only one
-f = textread(filename,'%s','delimiter','\n','whitespace','','bufsize',4095*10);
+f = textread(filename,'%s','delimiter','\n','whitespace','','bufsize',4095*100);
 [unused,bptok] = xmtok(f);
 % The first line of code of a function is not counted in bptok
 codeCount = sum(bptok)+1;
@@ -185,7 +185,7 @@ for m = 1:length(callStrc)
     % looking for these things in a subfunction.
     % NOTE: This will not work for Japanese files
     if ~strcmp(strc(end).type,'subfunction')
-        f = textread(fileName,'%s','delimiter','\n','whitespace','','bufsize',4095*10);
+        f = textread(fileName,'%s','delimiter','\n','whitespace','','bufsize',4095*100);
         strc(end).example = '';
         for i = 1:length(f)
             % The help report searches all comment lines in the file,

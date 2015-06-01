@@ -27,7 +27,7 @@ class QualityMeasuringTool(object):
     def __init__(self, name, languages, measures):
         self.__experiment = None
         self.name = name
-        # Supported langues
+        # Supported languages
         self.languages = languages
         # Supported measures
         self.measures = measures

@@ -29,6 +29,7 @@ class ZurichCorpus(SoftwareCorpus):
             self._products = [
                 ImageJ(corpus=self),
                 Infectio(corpus=self),
+                CellProfiler(corpus=self),
             ]
         return self._products
 
@@ -93,3 +94,32 @@ class Infectio(SoftwareProduct):
 
     def get_versions(self, location):
         return ['master']
+
+
+class CellProfiler(SoftwareProduct):
+
+    def __init__(self, corpus):
+        SoftwareProduct.__init__(
+            self,
+            name='CellProfiler1.0',
+            language='Matlab',
+            libraries=['MEX'],  # Dependencies
+            established_in_year='2006',
+            primary_paper=(
+                'Carpenter AE, Jones TR, Lamprecht MR, Clarke C, Kang IH, '
+                'Friman O, Guertin DA, Chang JH, Lindquist RA, Moffat J, '
+                'Golland P, Sabatini DM',
+                'CellProfiler: image analysis software for identifying and '
+                'quantifying cell phenotypes',
+                'http://genomebiology.com/2006/7/10/R100',
+            ),
+            urls=('http://www.cellprofiler.org/', ),
+            categories=['image_processing', 'bioimage_informatics'],
+            # List of all version available in the corpus.
+            versions=[],
+            corpus=corpus,
+        )
+        self.versions = self.get_versions(self.location_path)
+
+    def get_versions(self, location):
+        return ['latest']
