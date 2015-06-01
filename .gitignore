@@ -53,3 +53,6 @@ coverage.xml
 docs/_build/
 
 doc/hqm/*
+
+# ipython notebooks
+.ipynb_checkpoints/
